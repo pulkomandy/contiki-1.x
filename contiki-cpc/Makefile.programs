@@ -84,25 +84,32 @@ CFLAGS:=$(CFLAGSCOMMON) --compile-only \
 	-DWITH_CONIO \
 	-DWITH_LOADER_ARCH
 
-
 # conversion of intel hex record to binary, cpc binary with header, then inject into disc image
 define MAKE_DSC
-	bin/makelnk -r -o $@.ihx arch/crt0-prg.o $< > $@.lnk
+echo -i $(@:.dsc=.ihx) > $@.lnk
+	echo arch/crt0-prg.o >> $@.lnk
+	echo $< >> $@.lnk
+	echo -e >> $@.lnk
 	$(LD) -f $@.lnk
-	bin/makebin -p -b 0 -s 65535 < $@.ihx > $@.bin
-	bin/addhead  $@.bin $@.bin.ams
-	bin/cpcxfs contiki.dsk -f -b -p $@.bin.ams $(@F)
+	makebin -p -s 65535 < $(@:.dsc=.ihx) > $@.bin
+	cpcfs contiki.dsk p -b -e $@.bin
 endef	
 
 %.dsc: %-dsc.o 
 	$(MAKE_DSC)
 
 define MAKE_PRG
-	bin/makelnk -r -m -o $@.ihx -k /usr/share/sdcc/lib/z80 -l z80 arch/crt0-prg.o loader/loader-arch-module.o arch/contiki_labels.o $^ > $@.lnk
+echo -i $(@:.prg=.ihx) > $@.lnk
+	echo -k /usr/share/sdcc/lib/z80 >> $@.lnk
+	echo -l z80 >> $@.lnk
+	echo arch/crt0-prg.o >> $@.lnk
+	echo loader/loader-arch-module.o >> $@.lnk
+	echo arch/contiki_labels.o >> $@.lnk
+	echo $^ | xargs -n1 >> $@.lnk
+	echo -e >> $@.lnk
 	$(LD) -f $@.lnk
-	bin/makebin -p -b 0 -s 65535 < $@.ihx > $@.bin
-	bin/addhead  $@.bin $@.bin.ams
-	bin/cpcxfs contiki.dsk -f -b -p $@.bin.ams $(@F)
+	makebin -p -s 65535 < $(@:.prg=.ihx) > $@.bin
+	cpcfs contiki.dsk p -b -e $@.bin
 endef	
 
 ../contiki/apps/irc.prg: ../contiki/apps/ircc.o ../contiki/apps/ircc-strings.o \
@@ -170,13 +177,13 @@ endef
 ../contiki/apps/process.dsc: ../contiki/apps/processes-dsc.o
 	$(MAKE_DSC)
 
-../contiki/apps/dir.prg: ../contiki/apps/directory.o
+../contiki/apps/dir.prg: ../contiki/apps/directory.o lib/strcasecmp.o
 	$(MAKE_PRG)
 
 ./apps/dir.dsc: ./apps/directory-dsc.o
 	$(MAKE_DSC)
 
-../contiki/apps/shell.prg: ../contiki/apps/shell-gui.o ./apps/shell.o
+../contiki/apps/shell.prg: ../contiki/apps/shell-gui.o ./apps/shell.o ../contiki/lib/ctk-textentry-cmdline.o
 	$(MAKE_PRG)
 
 ../contiki/apps/telnetd.prg: ../contiki/apps/telnetd.o \
