@@ -35,7 +35,6 @@
 
 #include "dsc.h"
 
-extern struct ctk_icon about_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(about_dsc,
     "About Contiki",
@@ -70,5 +69,7 @@ static char abouticon_textmap[9] = {
 #if CTK_CONF_ICONS
 static struct ctk_icon about_icon =
   {CTK_ICON("About Contiki", abouticon_bitmap, abouticon_textmap)};
+#else
+extern struct ctk_icon about_icon;
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

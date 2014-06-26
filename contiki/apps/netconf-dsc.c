@@ -35,7 +35,6 @@
 
 #include "dsc.h"
 
-extern struct ctk_icon netconf_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(netconf_dsc,
     "Network configuration",
@@ -70,5 +69,7 @@ static char tcpipconficon_textmap[9] = {
 #if CTK_CONF_ICONS
 static struct ctk_icon netconf_icon =
   {CTK_ICON("Network setup", tcpipconficon_bitmap, tcpipconficon_textmap)};
+#else
+extern struct ctk_icon netconf_icon;
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

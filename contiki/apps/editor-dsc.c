@@ -35,7 +35,6 @@
 
 #include "dsc.h"
 
-extern struct ctk_icon editor_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(editor_dsc,
     "A simple text editor",
@@ -70,5 +69,7 @@ static char editoricon_textmap[9] = {
 #if CTK_CONF_ICONS
 static struct ctk_icon editor_icon =
   {CTK_ICON("Editor", editoricon_bitmap, editoricon_textmap)};
+#else
+extern struct ctk_icon editor_icon;
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/
