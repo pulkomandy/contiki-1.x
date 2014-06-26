@@ -39,7 +39,6 @@ include Makefile.common
 
 CFLAGS:=$(CFLAGSCOMMON) --compile-only \
         -DWITH_ASCII \
-	-DCTK_CONIO \
 	-DWITH_LOADER_ARCH \
 	-DWITH_LOADER_ARCH=1
 
@@ -100,13 +99,15 @@ CONTIKI_OBJ= ./arch/crt0.o \
 	./loader/cfs-cpc.o \
 	./arch/main.o \
 	./arch/arch.o \
+	./lib/strcasecmp.o \
 	$(UIP)
 
 
 contiki: $(CONTIKI_OBJ)
 	$(LD) -f arch/contiki.lnk
-	./bin/make_labels -a _CODE -a _DATA -x _main -x __clock -x _exit contiki.map arch/contiki_labels.s
-	./bin/makebin -p -b 256 -s 65535 < contiki.ihx > temp/contiki.bin
-	./bin/addhead -s 256 -t "binary" -x 256 temp/contiki.bin temp/contiki_ams.bin
-	./bin/cpcxfs contiki.dsk -f -b -p temp/contiki_ams.bin contiki.bin
+	#./bin/make_labels -a _CODE -a _DATA -x _main -x __clock -x _exit contiki.map arch/contiki_labels.s
+	makebin -p -s 65535 < contiki.ihx > contiki.raw
+	dd if=contiki.raw of=contiki.bin bs=256 skip=1
+	cpcfs contiki.dsk f
+	cpcfs contiki.dsk p contiki.bin,256,256 -b -e
 

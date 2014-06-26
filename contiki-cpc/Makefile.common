@@ -1,7 +1,7 @@
 CC=sdcc
-AS=as-z80
-CL=link-z80
-LD=link-z80
+AS=sdasz80
+CL=sdldz80
+LD=sdldz80
 
 CFLAGSCOMMON= \
 	-I apps \
@@ -18,7 +18,8 @@ CFLAGSCOMMON= \
 	-I $(CONTIKI)/ppp \
 	-I $(CONTIKI)/uip \
 	-mz80 -D__fastcall__=/**/ -D__CPC__ -DCLK_TCK=16384 \
-	--no-std-crt0 --opt-code-size --peep-file ~/peeph/peep.def
+	-DCTK_CONIO \
+	--no-std-crt0 --opt-code-size
 
 CLFLAGS= 
 OPT=

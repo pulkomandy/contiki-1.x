@@ -77,7 +77,7 @@ endef
 	$(MAKE_DSC)
 
 define MAKE_PRG
-	bin/makelnk -r -m -o $@.ihx -k /usr/local/share/sdcc/lib/z80 -l z80 arch/crt0-prg.o loader/loader-arch-module.o arch/contiki_labels.o $^ > $@.lnk
+	bin/makelnk -r -m -o $@.ihx -k /usr/share/sdcc/lib/z80 -l z80 arch/crt0-prg.o loader/loader-arch-module.o arch/contiki_labels.o $^ > $@.lnk
 	$(LD) -f $@.lnk
 	bin/makebin -p -b 0 -s 65535 < $@.ihx > $@.bin
 	bin/addhead  $@.bin $@.bin.ams
