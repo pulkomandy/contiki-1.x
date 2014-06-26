@@ -1231,8 +1231,8 @@ textentry_input(ctk_arch_key_t c,
   register char *cptr, *cptr2;
   static unsigned char len, txpos, typos, tlen;
 
-  if(t->input != NULL && t->input(c, t)) {
-    return;
+  if(t->input != NULL && t->input(c, (void*)t)) {
+      return;
   }
 
   txpos = t->xpos;

@@ -40,7 +40,7 @@ void cputs (char* s);
 
 char cgetc (void);
 
-void  revers ();
+void  revers (char);
 
 void textcolor (unsigned char color);
 

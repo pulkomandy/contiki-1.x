@@ -37,6 +37,6 @@
 
 #include "dsc.h"
 
-DSC_HEADER(configedit_dsc);
+DSC_HEADER(configedit_dsc)
 
 #endif /* __CONFIGEDIT_DSC_H__ */

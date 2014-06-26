@@ -35,7 +35,6 @@
 
 #include "dsc.h"
 
-extern struct ctk_icon processes_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(processes_dsc,
     "Process information",
@@ -70,5 +69,7 @@ static char processesicon_textmap[9] = {
 #if CTK_CONF_ICONS
 static struct ctk_icon processes_icon =
   {CTK_ICON("Processes", processesicon_bitmap, processesicon_textmap)};
+#else
+extern struct ctk_icon processes_icon;
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

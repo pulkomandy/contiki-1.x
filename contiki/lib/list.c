@@ -105,7 +105,7 @@ struct list {
  * \param list The list to be initialized.
  */
 void
-list_init(list_t list)
+list_init(void** list)
 {
   *list = NULL;
 }
@@ -122,7 +122,7 @@ list_init(list_t list)
  * \sa list_tail()
  */
 void *
-list_head(list_t list)
+list_head(void** list)
 {
   return *list;
 }
@@ -140,7 +140,7 @@ list_head(list_t list)
  * \param src The source list.
  */
 void
-list_copy(list_t dest, list_t src)
+list_copy(void** dest, void** src)
 {
   *dest = *src;
 }
@@ -157,7 +157,7 @@ list_copy(list_t dest, list_t src)
  * \sa list_head()
  */
 void *
-list_tail(list_t list)
+list_tail(void** list)
 {
   struct list *l;
   
@@ -182,7 +182,7 @@ list_tail(list_t list)
  *
  */
 void
-list_add(list_t list, void *item)
+list_add(void** list, void *item)
 {
   struct list *l;
 
@@ -201,7 +201,7 @@ list_add(list_t list, void *item)
  * Add an item to the start of the list.
  */
 void
-list_push(list_t list, void *item)
+list_push(void** list, void *item)
 {
   /*  struct list *l;*/
 
@@ -219,7 +219,7 @@ list_push(list_t list, void *item)
  *
  */
 void *
-list_chop(list_t list)
+list_chop(void** list)
 {
   struct list *l, *r;
   
@@ -250,7 +250,7 @@ list_chop(list_t list)
  */
 /*---------------------------------------------------------------------------*/
 void *
-list_pop(list_t list)
+list_pop(void** list)
 {
   struct list *l;
   
@@ -272,7 +272,7 @@ list_pop(list_t list)
  */
 /*---------------------------------------------------------------------------*/
 void
-list_remove(list_t list, void *item)
+list_remove(void** list, void *item)
 {
   struct list *l, *r;
   
@@ -307,7 +307,7 @@ list_remove(list_t list, void *item)
  */
 /*---------------------------------------------------------------------------*/
 int
-list_length(list_t list)
+list_length(void** list)
 {
   struct list *l; 
   int n = 0;

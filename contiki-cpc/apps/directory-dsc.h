@@ -37,6 +37,6 @@
 
 #include "dsc.h"
 
-DSC_HEADER(directory_dsc);
+DSC_HEADER(directory_dsc)
 
 #endif /* __DIRECTORY_DSC_H__ */

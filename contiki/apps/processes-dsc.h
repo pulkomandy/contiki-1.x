@@ -37,6 +37,6 @@
 
 #include "dsc.h"
 
-DSC_HEADER(processes_dsc);
+DSC_HEADER(processes_dsc)
 
 #endif /* __PROCESSES_DSC_H__ */
