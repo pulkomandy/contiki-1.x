@@ -129,7 +129,7 @@ screensaverconf(char *str)
   char *nt;
   
   nt = nullterminate(str);
-  program_handler_screensaver(str);
+  program_handler_setscreensaver(str);
 
   return nt + 1;
 }
@@ -141,8 +141,6 @@ ipaddrconf(char *str)
   char *nt;
   
   nt = nullterminate(str);
-
-
 //  if(uiplib_ipaddrconv(str, (unsigned char *)addr)) {
 //    uip_sethostaddr(addr);
 //  }
@@ -241,7 +239,7 @@ configscript(void)
 LOADER_INIT_FUNC(config_init, arg)
 {
   arg_free(arg);
-  program_handler_screensaver(NULL);  
+  program_handler_setscreensaver(NULL);  
   configscript();
   LOADER_UNLOAD();
 }
