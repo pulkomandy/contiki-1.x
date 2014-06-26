@@ -57,7 +57,7 @@ static struct ctk_label loglabel =
 static char command[SHELL_GUI_CONF_XSIZE - 1];
 static struct ctk_textentry commandentry =
   {CTK_TEXTENTRY_INPUT(0, SHELL_GUI_CONF_YSIZE, SHELL_GUI_CONF_XSIZE - 2, 1, command,
-		       SHELL_GUI_CONF_XSIZE - 2, ctk_textentry_cmdline_input)};
+		       SHELL_GUI_CONF_XSIZE - 2, NULL /*ctk_textentry_cmdline_input*/)};
 
 EK_EVENTHANDLER(eventhandler, ev, data);
 EK_PROCESS(p, "Command shell", EK_PRIO_NORMAL,
@@ -124,6 +124,7 @@ EK_EVENTHANDLER(eventhandler, ev, data)
   EK_EVENTHANDLER_ARGS(ev, data);
   
   if(ev == EK_EVENT_INIT) {
+	commandentry.input = (void*)ctk_textentry_cmdline_input;
     ctk_window_new(&window, SHELL_GUI_CONF_XSIZE,
 		   SHELL_GUI_CONF_YSIZE + 1, "Command shell");
     CTK_WIDGET_ADD(&window, &loglabel);
