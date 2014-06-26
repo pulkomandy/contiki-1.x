@@ -1,1 +1,0 @@
-#define LOG_CONF_ENABLED 0
