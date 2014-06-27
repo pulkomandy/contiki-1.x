@@ -1,4 +1,4 @@
--im contiki
+-imw contiki
 -k /usr/share/sdcc/lib/z80
 -b _CODE=0x0100
 -l z80
