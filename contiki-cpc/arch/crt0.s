@@ -6,8 +6,8 @@
 
     .module crt0
 	.globl	_main
+;	.globl __jpbc
 	.globl _progend
-	.globl __jpbc
 	.area	_HEADER (ABS)
 	;; Ordering of segments for the linker.
 	.area	_CODE
@@ -19,17 +19,33 @@ init:
 
 _exit::
 	ret
-__jpbc:
-	push bc
-	ret
+;__jpbc:
+;	push bc
+;	ret
+
+	.area _HOME
+	.area _CODE
+	.area _INITIALIZER
+	.area   _GSINIT (REL)
+    .area   _GSFINAL (REL)
+_progend::
 
 	.area	_DATA (REL)
+	.area _INITIALIZED
+	.area _BSEG
 	 .area   _BSS (REL)
+    	.area   _HEAP (REL)
 	
 	.area   _GSINIT (REL)
 gsinit::	
+	ld	bc, #l__INITIALIZER
+	ld	a, b
+	or	a, c
+	jr	Z, gsinit_next
+	ld	de, #s__INITIALIZED
+	ld	hl, #s__INITIALIZER
+	ldir
+gsinit_next:
 
-    .area   _GSFINAL (REL)
-    ret
-    	.area   _HEAP (REL)
-_progend::
+	.area   _GSFINAL
+	ret
