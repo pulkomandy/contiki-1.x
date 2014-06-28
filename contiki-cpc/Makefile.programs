@@ -99,8 +99,8 @@ endef
 	$(MAKE_DSC)
 
 define MAKE_PRG
-echo -i $(@:.prg=.ihx) > $@.lnk
-	echo -k /usr/share/sdcc/lib/z80 >> $@.lnk
+	echo -ihmwn $(@:.prg=.ihx) > $@.lnk
+	echo -k /usr/local/share/sdcc/lib/z80 >> $@.lnk
 	echo -l z80 >> $@.lnk
 	echo arch/crt0-prg.o >> $@.lnk
 	echo loader/loader-arch-module.o >> $@.lnk
