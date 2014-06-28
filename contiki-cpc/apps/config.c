@@ -123,6 +123,7 @@ loadfile(char *str)
   return nt + 1;
 }
 /*-----------------------------------------------------------------------------------*/
+#if CTK_CONF_SCREENSAVER
 static char *
 screensaverconf(char *str)
 {
@@ -133,6 +134,7 @@ screensaverconf(char *str)
 
   return nt + 1;
 }
+#endif
 /*-----------------------------------------------------------------------------------*/
 static u16_t addr[2];
 static char *
@@ -191,7 +193,9 @@ const static struct ptentry configparsetab[] =
   {{'n', loadfile},
    {'t', loadfile},
    {'c', loadfile},   
+#if CTK_CONF_SCREENSAVER
    {'s', screensaverconf},   
+#endif
    {'i', ipaddrconf},
    {'m', netmaskconf},
    {'r', drconf},
@@ -239,7 +243,9 @@ configscript(void)
 LOADER_INIT_FUNC(config_init, arg)
 {
   arg_free(arg);
+#if CTK_CONF_SCREENSAVER
   program_handler_setscreensaver(NULL);  
+#endif
   configscript();
   LOADER_UNLOAD();
 }
