@@ -70,7 +70,7 @@ static const struct cfs_service_interface interface =
   };
 
 EK_EVENTHANDLER(cpc_cfs_eventhandler, ev, data);
-EK_PROCESS(proc, CFS_SERVICE_NAME ": KERNAL", EK_PRIO_NORMAL,
+EK_PROCESS(proc, CFS_SERVICE_NAME ": AMSDOS", EK_PRIO_NORMAL,
            cpc_cfs_eventhandler, NULL, (void *)&interface);
 
 /*---------------------------------------------------------------------------*/
@@ -85,7 +85,7 @@ EK_EVENTHANDLER(cpc_cfs_eventhandler, ev, data)
   switch(ev) {
   case EK_EVENT_INIT:
   case EK_EVENT_REPLACE:
-    log_message("Starting KERNAL CFS", "");
+    log_message("Starting AMSDOS CFS", "");
     break;
   case EK_EVENT_REQUEST_REPLACE:
     ek_replace((struct ek_proc *)data, &interface);
@@ -95,6 +95,8 @@ EK_EVENTHANDLER(cpc_cfs_eventhandler, ev, data)
     break;
   }
 }
+
+
 /*---------------------------------------------------------------------------*/
 static int
 s_open(const char *n, int f)
@@ -147,7 +149,7 @@ s_readdir(struct cfs_dir *p, struct cfs_dirent *e)
   int size;
   int npos;
   struct cpc_dir *cpcdir = (struct cpc_dir *)p;
-  char *ptr = cpcdir->ptr;
+  unsigned char *ptr = cpcdir->ptr;
 
   if (ptr[0]!=0xff)
 	return 1;
