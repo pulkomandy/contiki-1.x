@@ -25,4 +25,5 @@
 ../contiki/apps/processes-dsc.o
 ./arch/main.o
 ./arch/arch.o
+./arch/putchar.o
 -e
