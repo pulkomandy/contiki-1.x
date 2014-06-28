@@ -61,7 +61,6 @@ UIP_OBJ = ../contiki/uip/dhcpc.o \
 CONTIKI_OBJ= ./arch/crt0.o \
 	./loader/rel.o \
 	./arch/key.o \
-	./arch/mem.o \
 	./arch/malloc.o \
 	./arch/clock.o \
 	./loader/dir.o \
@@ -105,7 +104,7 @@ CONTIKI_OBJ= ./arch/crt0.o \
 
 contiki: $(CONTIKI_OBJ)
 	$(LD) -f arch/contiki.lnk
-	#./bin/make_labels -a _CODE -a _DATA -x _main -x __clock -x _exit contiki.map arch/contiki_labels.s
+	./bin/make_labels contiki.map arch/contiki_labels.s
 	makebin -p -s 65535 < contiki.ihx > contiki.raw
 	dd if=contiki.raw of=contiki.bin bs=256 skip=1
 	cpcfs contiki.dsk f

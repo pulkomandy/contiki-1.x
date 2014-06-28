@@ -4,7 +4,6 @@
 -l z80
 ./arch/crt0.o
 ./arch/key.o
-./arch/mem.o
 ./arch/malloc.o
 ./arch/clock.o
 ./loader/loader-arch-cpc.o
