@@ -1,0 +1,473 @@
+Index: Makefile.in
+===================================================================
+--- Makefile.in	(révision 9037)
++++ Makefile.in	(copie de travail)
+@@ -47,7 +47,7 @@
+ SRC = lk_readnl.c lkaomf51.c lkar.c lkarea.c lkdata.c lkelf.c lkeval.c \
+         lkhead.c lklex.c lklib.c lklibr.c lklist.c lkmain.c lkmem.c \
+         lknoice.c lkout.c lkrel.c lkrloc.c lkrloc3.c lks19.c lksdcclib.c \
+-        lksym.c sdld.c lksdcdb.c lkbank.c
++        lksym.c sdld.c lksdcdb.c lkbank.c lkrrel.c
+ 
+ LKSOURCES = $(SRC) $(ASXXLIBSRC:%.c=$(ASXXLIB)/%.c)
+ 
+Index: aslink.h
+===================================================================
+--- aslink.h	(révision 9037)
++++ aslink.h	(copie de travail)
+@@ -1019,6 +1019,8 @@
+                                  */
+ #endif
+ 
++extern  int     hflag;          /*      Generate relocatable executable
++								 */
+ extern  int     pflag;          /*      print linker command file flag
+                                  */
+ extern  int     uflag;          /*      Listing relocation flag
+Index: lkdata.c
+===================================================================
+--- lkdata.c	(révision 9037)
++++ lkdata.c	(copie de travail)
+@@ -66,6 +66,9 @@
+ int     objflg;         /*      Linked file/library object output flag
+                          */
+ 
++int     hflag;          /*      Generate relocatable executable
++						 */
++
+ #if NOICE
+ int     jflag;          /*      NoICE output flag
+                          */
+Index: lkmain.c
+===================================================================
+--- lkmain.c	(révision 9037)
++++ lkmain.c	(copie de travail)
+@@ -233,6 +233,7 @@
+         startp->f_idp = "";
+ 
+         pflag = 1;
++		hflag = 0;
+ 
+         for(i=1; i<argc; i++) {
+                 ip = ib;
+@@ -958,6 +959,11 @@
+                                         }
+                                         return(0);
+ 
++								case 'h':
++								case 'H':
++										hflag = 1;
++										break;
++
+                                 case 'I':
+                                         if (is_sdld() && !(TARGET_IS_Z80 || TARGET_IS_GB)) {
+                                                 iramsav();
+Index: lkrloc3.c
+===================================================================
+--- lkrloc3.c	(révision 9037)
++++ lkrloc3.c	(copie de travail)
+@@ -31,6 +31,7 @@
+  */
+ 
+ #include "aslink.h"
++#include "lkrrel.h"
+ 
+ /*)Module       lkrloc3.c
+  *
+@@ -332,6 +333,9 @@
+          * Do remaining relocations
+          */
+         while (more()) {
++				int output_relocation_record;
++				int raddr;
++
+                 error = 0;
+                 mode = (int) eval();
+ 
+@@ -390,6 +394,95 @@
+                         reli -= paga + pags;
+                 }
+ 
++		/* KevT 28-05-2005 */
++
++		if (hflag)
++		{
++		output_relocation_record = 0;
++		if (mode & R3_SYM)
++		{
++			/* If the symbol is defined in a absolute area, then we do not
++			output a record. This allows us to reference absolute addresses
++			in our code, but it can still be relocated */
++
++			/* If the symbol is relative, it is within our relocatable program */
++
++			/* printf("Symbol: %s\n",s[rindex]->s_id); */
++			if ((s[rindex]->s_axp->a_bap->a_flag & A4_ABS)==0)
++			{
++				output_relocation_record=1;
++			}
++		}
++		else
++		{
++			/* If the area is absolute then we do not output a record.
++			This allows us to reference absolute memory, but still the code
++			can be relocated. */
++			/* If the area is relative, it refers to data that is part of the 
++			relocatable program */
++
++			/* printf("Area: %s\n",a[rindex]->a_bap->a_id); */
++			if ((a[rindex]->a_bap->a_flag & A4_ABS)==0)
++			{
++				output_relocation_record=1;
++			}
++		}
++		
++		if (output_relocation_record)
++		{
++			a_uint relocate_address = pc+(rtp-rtofst);
++			if (hilo)
++			{
++				raddr = reli + ((rtval[rtp]&0x0ff)<<8) + (rtval[rtp+1]&0x0ff);
++			}
++			else
++			{
++				raddr = reli + ((rtval[rtp+1]&0x0ff)<<8) + (rtval[rtp]&0x0ff);
++			}
++			/*printf("Relocation modify address: %04x\n",relocate_address); */
++			/*printf("Relocation address: %04x\n",raddr); */
++			if (mode & R3_BYTE)
++			{
++				if (mode & R3_BYTX)
++				{
++					if (mode & R3_MSB)
++					{
++						
++relrec8hi(relocate_address,raddr);
++					}
++					else
++					{
++						
++relrec8lo(relocate_address,raddr);
++					}
++				}
++				else
++				{
++					printf("not supported");
++				}
++			}
++			else
++			{
++				if (mode & R3_BYTX) 
++				{
++					if (mode & R3_MSB) 
++					{
++						printf("not supported");
++					}
++					else
++					{
++						printf("not supported");
++					}
++				}	
++				else
++				{
++					relrec16(relocate_address);
++				}
++			}
++		}		
++		}
++
++
+                 /*
+                  * R3_BYTE or R3_WORD operation
+                  */
+@@ -755,6 +848,12 @@
+         if (uflag != 0) {
+                 lkulist(0);
+         }
++
++		/* output relocation data */
++		if (hflag) {
++			relrecwrite();
++		}
++
+         if (oflag != 0) {
+                 lkflush();
+                 lkfclose();
+Index: lkrrel.c
+===================================================================
+--- lkrrel.c	(révision 0)
++++ lkrrel.c	(copie de travail)
+@@ -0,0 +1,251 @@
++/* (c) Kevin Thacker, May 2005 */
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include "aslink.h"
++#include "lkrrel.h"
++
++struct relrechead
++{
++	int count;
++	struct relrec *head;
++};
++
++/* 16-bit values, add full 16-bit base address */
++
++static struct relrechead head16= {0,NULL};
++/* 8-bit, but add high byte of 16-bit base address */
++static struct relrechead head8hi = {0,NULL};
++/* 8-bit, but add low byte of 16-bit base address */
++static struct relrechead head8lo = {0,NULL};
++
++/* internal; free's list */
++static void relrecfree(struct relrechead *head)
++{
++	struct relrec *cur = head->head;
++	
++	while (cur!=NULL)
++	{
++		struct relrec *next = cur->next;
++		free(cur);
++
++		cur = next;
++	}
++}
++
++/* free relocation record list; e.g. on exit */
++void freerelrec()
++{
++	relrecfree(&head16);
++	relrecfree(&head8hi);
++	relrecfree(&head8lo);
++}
++
++/* internal; allocate a relocation record */
++static void newrelrec(struct relrechead *head, a_uint addr, a_uint symaddr)
++{
++	struct relrec *rec;
++	
++	rec  = (struct relrec *) malloc(sizeof(struct relrec));
++	
++	/* error if allocation failed */
++	if (rec==NULL)
++		return;
++
++	rec->addr = addr;
++	rec->symaddr = symaddr;
++	
++	/* add to start of list */
++	rec->next = head->head;
++	head->head = rec;
++	head->count++;
++}
++	
++/* add item to 16-bit relocation record list */
++void relrec16(a_uint addr)
++{
++	newrelrec(&head16, addr,0);
++}
++
++/* add item to 8-bit (high) relocation record list */
++void relrec8hi(a_uint addr, a_uint symaddr)
++{
++	newrelrec(&head8hi, addr,symaddr);
++}
++
++/* add address to 8-bit (low) relocation list */
++void relrec8lo(a_uint addr, a_uint symaddr)
++{
++	newrelrec(&head8lo, addr,symaddr);
++}
++
++/* internal; compare two addresses within two relocate records */ 
++static int relreccompare(const void *a, const void *b)
++{
++	const struct relrec *relreca = (const struct relrec *)a;
++	const struct relrec *relrecb = (const struct relrec *)b;
++
++	return (relreca->addr-relrecb->addr);
++}
++
++/* sort a list of relocate records and return an array of the records */
++static struct relrec *relrecsort(struct relrechead *head)
++{
++	int count;
++	struct relrec *reclist;
++	struct relrec *cur;
++
++	if (head->count==0)
++		return NULL;
++
++	/* allocate list to hold all items */
++	reclist = (struct relrec *)malloc(sizeof(struct relrec)*head->count);	
++
++	if (reclist==NULL)
++		return NULL;
++
++	/* fill list */
++	count = 0;
++	cur = head->head;
++	while (cur!=NULL)
++	{
++		memcpy(&reclist[count],cur,sizeof(struct relrec));
++		count++;
++		cur = cur->next;
++	}
++
++	/* sort into ascending address order */
++	qsort(reclist, count, sizeof(struct relrec),relreccompare);
++
++	return reclist;
++}
++
++int outbyte(int addr, char byte)
++{
++	rtval[0] = addr&0x0ff;
++	rtval[1] = (addr>>8)&0x0ff;
++	rtval[2] = byte&0x0ff;
++	addr+=1;		
++	rtflg[0] = 1;
++	rtflg[1] = 1;
++	rtflg[2] = 1;
++	rtcnt = 3;
++	lkout(1);
++	return addr;
++}
++
++void relrecwritelist1(struct relrechead *list,int *addrptr)
++{
++	int i;
++	struct relrec *relreclist;
++	int addr;
++
++	addr = *addrptr;
++
++	relreclist = relrecsort(list);
++
++	if (relreclist!=NULL)
++	{
++		int prevaddr = 0;
++		for (i=0; i<list->count; i++)
++		{
++			struct relrec *cur = &relreclist[i];
++
++			int delta = cur->addr-prevaddr;
++			
++			if (delta>254)
++			{
++				int largedelta = delta-1;
++				addr = outbyte(addr,0x0ff);
++				addr = outbyte(addr,largedelta&0x0ff);
++				addr = outbyte(addr,(largedelta>>8)&0x0ff);
++				delta = 1;
++			}
++			prevaddr = cur->addr;
++			addr = outbyte(addr,delta&0x0ff);
++		}	
++	
++		free(relreclist);
++	}
++	
++	addr = outbyte(addr, 0);
++	
++	*addrptr = addr;
++
++}
++
++void relrecwritelist2(struct relrechead *list,int *addrptr)
++{
++	int i;
++	struct relrec *relreclist;
++	int addr;
++
++	addr = *addrptr;
++
++	relreclist = relrecsort(list);
++
++	if (relreclist!=NULL)
++	{
++		int prevaddr = 0;
++		for (i=0; i<list->count; i++)
++		{
++			struct relrec *cur = &relreclist[i];
++			int delta = cur->addr-prevaddr;
++			prevaddr = cur->addr;
++			
++			if (delta>254)
++			{
++				int largedelta = delta-1;
++				addr = outbyte(addr,0x0ff);
++				addr = outbyte(addr,largedelta&0x0ff);
++				addr = outbyte(addr,(largedelta>>8)&0x0ff);
++				delta = 1;
++			}
++
++			addr = outbyte(addr,delta&0x0ff);
++			addr = outbyte(addr,cur->symaddr&0x0ff);
++		}	
++	
++		free(relreclist);
++	}
++
++	addr = outbyte(addr,0);
++	
++	*addrptr = addr;
++
++}
++
++
++void relrecwrite()
++{
++	int areasize = 0;
++
++	struct area *cur = areap;
++	while (cur!=NULL)
++	{
++		areasize+=cur->a_size;
++		cur=cur->a_ap;
++	}
++
++	printf("total length before relocation records: %04x\n",areasize);
++
++	/* re-write offset to relocation records */
++	rtval[0] = 0;
++	rtval[1] = 0;
++	rtval[2] = areasize&0x0ff;
++	rtval[3] = (areasize>>8)&0x0ff;
++	rtflg[0] = 1;
++	rtflg[1] = 1;
++	rtflg[2] = 1;
++	rtflg[3] = 1;
++	rtcnt = 4;
++	lkout(1);
++	
++
++	int addr = areasize;
++
++
++	relrecwritelist1(&head16,&addr);
++	relrecwritelist1(&head8lo,&addr);
++	relrecwritelist2(&head8hi,&addr);
++}
+Index: lkrrel.h
+===================================================================
+--- lkrrel.h	(révision 0)
++++ lkrrel.h	(copie de travail)
+@@ -0,0 +1,17 @@
++/* relocation record */
++struct relrec
++{
++	/* next item */
++	struct relrec *next;
++
++	/* address of relocate */
++	a_uint addr;
++
++	a_uint symaddr;
++};
++
++void relrec16(a_uint addr);
++void relrec8lo(a_uint addr, a_uint symaddr);
++void relrec8hi(a_uint addr, a_uint symaddr);
++void freerelrec();
++void relrecwrite();
