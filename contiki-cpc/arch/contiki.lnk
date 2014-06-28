@@ -1,5 +1,5 @@
--imw contiki
--k /usr/share/sdcc/lib/z80
+-imwn contiki
+-k /usr/local/share/sdcc/lib/z80
 -b _CODE=0x0100
 -l z80
 ./arch/crt0.o
