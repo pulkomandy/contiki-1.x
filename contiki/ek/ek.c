@@ -182,19 +182,19 @@ static void
 procs_add(struct ek_proc *p)
 {
   static struct ek_proc *q, *r;
-  
+
   /* The process should be placed on the process list according to the
      process' priority. The higher the priority, the earlier on the
      list. */
   r = NULL;
   for(q = ek_procs; q != NULL; q = q->next) {
-    if(p->prio >= q->prio) {
-      p->next = q;
-      if(r == NULL) {
-	ek_procs = p;
+    if(q->prio < p->prio) {
+      if(r) {
+        r->next = p;       
       } else {
-	r->next = p;       
+        ek_procs = p;
       }
+      p->next = q;
       return;
     }
     r = q;
@@ -209,6 +209,7 @@ procs_add(struct ek_proc *p)
       p->next = NULL;
     } 
   }
+
   
 }
 /*-----------------------------------------------------------------------------------*/
@@ -273,7 +274,7 @@ ek_start(CC_REGISTER_ARG struct ek_proc *p)
 
   /* Post an asynchronous event to the process. */
   ek_post(id, EK_EVENT_INIT, p);
-
+  
   return id;
 }
 /*-----------------------------------------------------------------------------------*/
@@ -455,7 +456,6 @@ ek_process_poll(void)
   
   /* Call poll handlers. */
   for(p = ek_procs; p != NULL; p = p->next) {
-    
     if(ek_poll_request) {
       ek_poll_request = 0;
       p = ek_procs;
