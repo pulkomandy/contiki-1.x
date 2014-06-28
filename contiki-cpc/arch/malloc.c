@@ -21,39 +21,31 @@ struct _MEMHEADER
 /* Address of this variable is the last byte of the heap. */
 //extern char _sdcc_heap_end;
 
-extern char *get_ram_start();
-extern char *get_ram_end();
-extern void calc_free_ram();
 extern char progend;
 
 static MEMHEADER *firstheader;
 /* setup two headers. One at start of free ram, second at end of free ram.
- We find free ram range by asking Amstrad's firmware. */
+ *
+ * Free ram starts after the _BSS segment.
+ * Free RAM ends before the memory used by expansion ROMs. For now we only
+ * consider ROM 7 (AMSDOS), which must be initialized before calling
+ * _sdcc_heap_init - probably in crt0.s...
+ */
 
 void
 _sdcc_heap_init(void)
 {
   MEMHEADER *lastheader;
-  unsigned int size;
-  char * ramstart;
-
-  /* ask firmware for free ram */
-  calc_free_ram();
-
-  /* start of ram is either start of range given by firmware,
-  or end of program; whichever is largest */
-  ramstart = get_ram_start();
-  if (ramstart<&progend)
-	ramstart = &progend;
+  int ramend;
 
   /* this is our first mem header */
-  firstheader = (MEMHEADER *)ramstart;
+  firstheader = (MEMHEADER *)(&progend);
   
   /* this is the size of ram available */
-  size = get_ram_end() - ramstart;
+  ramend = *(int*)(0xb8e8);
 
   /* calc address of last header */
-  lastheader = (MEMHEADER *)((char *)firstheader + size - HEADER_SIZE); 
+  lastheader = (MEMHEADER *)(ramend - HEADER_SIZE); 
   
   /* setup last header */
   lastheader->next = NULL;
