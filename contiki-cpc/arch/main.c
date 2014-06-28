@@ -78,7 +78,7 @@ EK_EVENTHANDLER(eventhandler, ev, data)
   }
 }
 /*-----------------------------------------------------------------------------------*/
-const EK_PROCESS(init, "Init", EK_PRIO_LOWEST,
+EK_PROCESS(init, "Init", EK_PRIO_LOWEST,
 	   eventhandler, NULL, NULL);
 /*-----------------------------------------------------------------------------------*/
 #if LOG_CONF_ENABLED
@@ -129,14 +129,12 @@ main(void)
   
   log_message("Starting process scheduling", "");  
 
-  while(1) {
-    if(ek_run() == 0) {
-      program_handler_load("welcome.prg", NULL);
-      break;
-    }
-  }
+  while(ek_run());
+
+  program_handler_load("welcome.prg", NULL);
+  log_message("Ready to rock!", "");  
     
-  while(1) {
+  for(;;) {
     ek_run();
   }
 }
