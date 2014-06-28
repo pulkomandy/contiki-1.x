@@ -1,4 +1,4 @@
-#include "loader-arch.h"
+#include "loader.h"
 #include "rel.h"
 #include <stddef.h>
 #include <malloc.h>
