@@ -37,7 +37,7 @@
 
 extern const struct ctk_icon directory_icon;
 /*-----------------------------------------------------------------------------------*/
-DSC(directory_dsc,
+const DSC(directory_dsc,
     "Directory reader",
     "dir.prg",
     directory_init,
