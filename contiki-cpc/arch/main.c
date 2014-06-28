@@ -68,7 +68,7 @@ uip_fw_periodic(void)
   return;
 }
 /*-----------------------------------------------------------------------------------*/
-EK_EVENTHANDLER(init_eventhandler, ev, data)
+EK_EVENTHANDLER(eventhandler, ev, data)
 {
   switch(ev) {
   case EK_EVENT_INIT:
@@ -78,20 +78,31 @@ EK_EVENTHANDLER(init_eventhandler, ev, data)
   }
 }
 /*-----------------------------------------------------------------------------------*/
-EK_PROCESS(init, "Init", EK_PRIO_LOWEST,
-	   init_eventhandler, NULL, NULL);
+const EK_PROCESS(init, "Init", EK_PRIO_LOWEST,
+	   eventhandler, NULL, NULL);
 /*-----------------------------------------------------------------------------------*/
 #if LOG_CONF_ENABLED
 void
 log_message(char *part1, char *part2)
 {
+  while(*part1 != 0) {
+    putchar(*part1++);
+  }
+
+  while(*part2 != 0) {
+    putchar(*part2++);
+  }
+  
+  putchar('\r');
+  putchar('\n');
 }
 #endif
+/*-----------------------------------------------------------------------------------*/
 void
 main(void)
 {
   
- log_message("Starting ", CONTIKI_VERSION_STRING);
+  log_message("Starting ", CONTIKI_VERSION_STRING);
   
   ek_init();
 
