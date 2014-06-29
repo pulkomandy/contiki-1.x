@@ -65,3 +65,39 @@ and use of memory by the CPC firmware and expansion ROMs (high address).
 
 Contiki is firmware-friendly and uses the CPC firmware for all IO operations
 (disk access, screen drawing, etc).
+
+Future plans
+============
+
+A lot of ideas are floating around...
+
+* Write a native CTK driver and stop using conio. Even when still using the
+firmware, this could improve drawing performance further and allow us to make
+things look nicer.
+* Stop using the firmware for graphics and disc access. Use a 6x8 font to
+have more space on screen.
+* Move Contiki to bank C7. Layout would look like this:
+  - In main RAM, 0000-7FFF used for 32K screen+interrupt vectors
+  - 8000-BFFF used for various internals code (screen drawing and font, probably)
+  - In banks C4-C6 and start of C7, have the heap where apps are loaded.
+  - Contiki kernel in bank C7 can be accessed by apps, and can access main RAM
+  as needed.
+  - The remaining central RAM bank can be mapped at 4000 and hold some code (FS
+  access?)
+
+System would run with all banks in main RAM, unless drawing to screen or doing
+FS access. In these case we would map C7 at C000-FFFF and the main RAM in the
+other slots.
+
+Going even further, Contiki should all be in main RAM, and leave the banks
+almost completely free for apps. This would need to use an RST (far call or so)
+to call Contiki methods from apps. Can SDCC handle this? We may need to generate
+syscall inlines or maybe we can do dirty tricks using the peephole to replace
+"CALL address" with "RST farcall ; dw address". This could leave 63+K of RAM
+for apps, and 32K of RAM for Contiki.
+
+In either case, when an app call the system, it may pass it a pointer to
+something. In order to parse the data, Contiki will need to map the right
+page at &4000. Making sure malloc never allocated a zone crossing page
+boundaries is a good idea here. This way any pointer can be used with a simple
+remapping of the two highest bytes.
