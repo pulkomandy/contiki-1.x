@@ -4,14 +4,18 @@
 	.area _HEADER (ABS)
 	.area _HOME (REL)	
 	.area _CODE (REL)
-	.area _INITIALIZER
+	.dw 0 ; Will be replaced with the address of the reloc. table by the linker.
+	.area _INITIALIZER (REL)
+izr::
 	.area   _GSINIT (REL)
     .area   _GSFINAL (REL)
-	;; relocation data
-	.dw 0
+	;; relocation data will be inserted here. It is used at loading time,
+	; then overriden by the initialization of the data area below.
 	
-	.area _INITIALIZED
+	.area _INITIALIZED (REL)
+izd::
     .area _DATA (REL)
+dat::
 	.area _BSEG
     .area   _BSS (REL)
     .area   _HEAP (REL)
@@ -22,14 +26,14 @@ gsinit::
 	ld	a, b
 	or	a, c
 	jr	Z, gsinit_next
-	ld	de, #s__INITIALIZED
-	ld	hl, #s__INITIALIZER
+	ld	hl, #izr
+	ld	de, #izd
 	ldir
 gsinit_next:
 ; Clear BSS sections
-	ld hl,#s__DATA
+	ld hl,#dat
 	ld (hl),#0
-	ld de,#s__DATA
+	ld de,#dat
 	inc de
 	ld bc,#l__DATA
 	ldir
