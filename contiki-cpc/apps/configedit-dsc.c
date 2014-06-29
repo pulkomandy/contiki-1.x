@@ -35,7 +35,6 @@
 
 #include "dsc.h"
 
-extern const struct ctk_icon configedit_icon;
 /*-----------------------------------------------------------------------------------*/
 DSC(configedit_dsc,
     "Edit Contiki configuration",
@@ -67,6 +66,6 @@ static const char tcpipconficon_textmap[9] = {
 };
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
-const struct ctk_icon configedit_icon =
+static const struct ctk_icon configedit_icon =
   {CTK_ICON("Configuration", tcpipconficon_bitmap, tcpipconficon_textmap)};
 /*-----------------------------------------------------------------------------------*/

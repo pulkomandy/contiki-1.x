@@ -67,7 +67,7 @@ static char shellicon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon shell_icon =
+static const struct ctk_icon shell_icon =
   {CTK_ICON("Command shell", shellicon_bitmap, shellicon_textmap)};
 #else
 extern struct ctk_icon shell_icon;

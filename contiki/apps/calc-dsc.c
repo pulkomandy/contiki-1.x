@@ -67,7 +67,7 @@ static char calcicon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon calc_icon =
+static const struct ctk_icon calc_icon =
   {CTK_ICON("Calculator", calcicon_bitmap, calcicon_textmap)};
 #else
 extern struct ctk_icon calc_icon;

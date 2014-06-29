@@ -38,7 +38,7 @@
 /*-----------------------------------------------------------------------------------*/
 DSC(processes_dsc,
     "Process information",
-    "processes.prg",
+    "process.prg",
     processes_init,
     &processes_icon);
 /*-----------------------------------------------------------------------------------*/
@@ -67,7 +67,7 @@ static char processesicon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon processes_icon =
+static const struct ctk_icon processes_icon =
   {CTK_ICON("Processes", processesicon_bitmap, processesicon_textmap)};
 #else
 extern struct ctk_icon processes_icon;

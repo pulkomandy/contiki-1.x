@@ -67,7 +67,7 @@ static char editoricon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon editor_icon =
+static const struct ctk_icon editor_icon =
   {CTK_ICON("Editor", editoricon_bitmap, editoricon_textmap)};
 #else
 extern struct ctk_icon editor_icon;

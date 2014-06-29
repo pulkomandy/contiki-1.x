@@ -35,7 +35,6 @@
 
 #include "dsc.h"
 
-extern const struct ctk_icon directory_icon;
 /*-----------------------------------------------------------------------------------*/
 const DSC(directory_dsc,
     "Directory reader",
@@ -67,6 +66,6 @@ static const char directoryicon_textmap[9] = {
 };
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
-const struct ctk_icon directory_icon =
+static const struct ctk_icon directory_icon =
   {CTK_ICON("Directory", directoryicon_bitmap, directoryicon_textmap)};
 /*-----------------------------------------------------------------------------------*/

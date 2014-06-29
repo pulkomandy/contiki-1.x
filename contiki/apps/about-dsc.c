@@ -67,7 +67,7 @@ static char abouticon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon about_icon =
+static const struct ctk_icon about_icon =
   {CTK_ICON("About Contiki", abouticon_bitmap, abouticon_textmap)};
 #else
 extern struct ctk_icon about_icon;
