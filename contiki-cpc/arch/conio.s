@@ -175,34 +175,23 @@ _cputsxy::
 
 		jr		cputs$
 
-; int cprintf (const char* format, ...);
-; Like printf, but uses direct screen I/O 
 
-; int vcprintf (const char* format, va_list ap);
-; Like vprintf, but uses direct screen I/O 
-
-; unsigned char cursor (unsigned char onoff);
-; If onoff is 1, a cursor is display when waiting for keyboard input. If
-; onoff is 0, the cursor is hidden when waiting for keyboard input. The
-; function returns the old cursor setting.
-
-
-; unsigned char revers (unsigned char onoff);
+; void revers (unsigned char onoff);
 ; Enable/disable reverse character display. This may not be supported by
-; the output device. Return the old setting.
+; the output device.
 ; TESTED
-
 .globl _revers
 
 _revers::
-		call	0xBB9C	; TXT INVERSE
+		; BB9C swaps foreground and background colors, rather than inverting 
+		; the characters. As a result, textcolor and bgcolor are confused.
+		; Disable this for now...
+		;jp	0xBB9C	; TXT INVERSE
 		ret
+
 
 ; unsigned char textcolor (unsigned char color);
 ; Set the color for text output. The old color setting is returned. 
-
-
-
 .globl	_textcolor
 
 _textcolor::
@@ -217,9 +206,9 @@ _textcolor::
 		ld		l,e
 		ret
 
+
 ; unsigned char bgcolor (unsigned char color);
 ; Set the color for the background. The old color setting is returned. */
-
 .globl	_bgcolor
 
 _bgcolor::	
@@ -394,10 +383,13 @@ _cclearxy::
 		inc 		h
 		inc 		l
 		call	0xBB75
-		ld		a,#0x020 ; White space
+		ld		c,#0x020 ; Whitespace
 
 cclearxyloop$:
-		call	_outchar
+		ld a,c
+		push bc
+		call	0xbb5d
+		pop bc
 		djnz	cclearxyloop$
 		ret
 
@@ -417,8 +409,7 @@ _screensize::
 		ld		a,#40    ; X Size
 		ld		(de),a
 
-		ld		hl,#4
-		add		hl,sp
+		inc     hl
 		ld		e,(hl)
 		inc		hl
 		ld 		d,(hl)
