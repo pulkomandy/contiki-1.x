@@ -373,24 +373,31 @@ cclearloop$:
 _cclearxy::
 		ld		hl,#2
 		add		hl,sp
-		ld		d,(hl)
+		ld		d,(hl) ; X
 		inc		hl
-		ld		e,(hl)
+		ld		e,(hl) ; Y
 		inc		hl
-		ld		b,(hl)
+
+		push af
+		ld		a,(hl) ; Length
+
+		; E is BOTTOM
+		; LEFT TOP
 		ld		h,d
 		ld		l,e
-		inc 		h
-		inc 		l
-		call	0xBB75
-		ld		c,#0x020 ; Whitespace
 
-cclearxyloop$:
-		ld a,c
-		push bc
-		call	0xbb5d
-		pop bc
-		djnz	cclearxyloop$
+		; RIGHT
+		dec 	a
+		add		d
+		ld		d,a
+
+		; TODO ink mask
+		call	0xBB99 ; TXT GET PAPER
+		call	0xBC2C ; SCR INK ENCODE
+
+		call	0xBC44 ; SCR FILL BOX
+
+		pop af
 		ret
 
 ; void screensize (unsigned char* x, unsigned char* y);
@@ -414,7 +421,7 @@ _screensize::
 		inc		hl
 		ld 		d,(hl)
 
-		ld		a,#24    ; Y Size
+		ld		a,#25    ; Y Size
 		ld		(de),a
 		ret
 
