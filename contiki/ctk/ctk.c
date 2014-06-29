@@ -423,16 +423,7 @@ ctk_window_open(CC_REGISTER_ARG struct ctk_window *w)
   
   /* Check if already open. */
   for(w2 = windows; w2 != w && w2 != NULL; w2 = w2->next);
-  if(w2 == NULL) {
-   /* Not open, so we add it at the head of the list of open
-       windows. */
-    w->next = windows;
-    if(windows != NULL) {
-      windows->prev = w;
-    }
-    windows = w;
-    w->prev = NULL;
-  } else {
+  if (w2) {
     /* Window already open, so we move it to the front of the windows
        list. */
     if(w != windows) {
@@ -447,8 +438,17 @@ ctk_window_open(CC_REGISTER_ARG struct ctk_window *w)
       windows = w;
       w->prev = NULL;
     }
+  } else {
+   /* Not open, so we add it at the head of the list of open
+       windows. */
+    w->prev = NULL;
+    if(windows != NULL) {
+      windows->prev = w;
+    }
+    w->next = windows;
+    windows = w;
   }
-  
+
 #if CTK_CONF_MENUS
   /* Recreate the Desktop menu's window entries.*/
   make_desktopmenu();
