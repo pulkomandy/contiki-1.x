@@ -39,7 +39,6 @@ include Makefile.common
 
 CFLAGS:=$(CFLAGSCOMMON) --compile-only \
         -DWITH_ASCII \
-	-DWITH_LOADER_ARCH \
 	-DWITH_LOADER_ARCH=1
 
 UIP_OBJ = ../contiki/uip/dhcpc.o \

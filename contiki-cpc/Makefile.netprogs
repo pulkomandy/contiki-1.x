@@ -61,7 +61,7 @@ include Makefile.common
 CFLAGS:=$(CFLAGSCOMMON) --compile-only \
 	-DWITH_ASCII \
 	-DWITH_CONIO \
-	-DWITH_LOADER_ARCH
+	-DWITH_LOADER_ARCH=1
 
 
 # conversion of intel hex record to binary, cpc binary with header, then inject into disc image
