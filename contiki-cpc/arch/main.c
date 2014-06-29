@@ -132,8 +132,7 @@ main(void)
   while(ek_run());
 
   program_handler_load("welcome.prg", NULL);
-  log_message("Ready to rock!", "");  
-    
+ 
   for(;;) {
     ek_run();
   }
