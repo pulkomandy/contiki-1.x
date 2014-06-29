@@ -11,9 +11,10 @@
 	;; Ordering of segments for the linker.
 	.area	_CODE
 init:
-
-;; Initialise global variables
+; This is the program entry point. Execution starts here
+;; Initialise global variables, clear BSS areas, initialize AMSDOS and setup heap.
     call    gsinit
+; Enter the C main.
 	call	_main
 
 _exit::
@@ -21,17 +22,26 @@ _exit::
 
 	.area _HOME
 	.area _CODE
-	.area _INITIALIZER
+	.area _INITIALIZED
 	.area   _GSINIT (REL)
     .area   _GSFINAL (REL)
 
-	.area _INITIALIZED
 	.area _DATA
 	.area _BSEG
 	.area _BSS (REL)
     .area _HEAP (REL)
 _progend::
+	; NOTE - THE IS NOT ROM-FRIENDLY!
+	; We put the initializers for initialized data in the memory that will later
+	; be used for the heap. The gsinit copies it back to the CODE area above.
+	; Then, we can overwrite the now unused initializers with the heap.
+	; In the case of software actually running from ROM, the initializer section
+	; would be in ROM, and GSINIT would copy it to RAM. Of course in that case,
+	; The initializer space can't be reclaimed for the heap...
+	.area _INITIALIZER
 	
+; -----------------------------------------------------------------------------
+
 	.area _GSINIT (REL)
 gsinit::	
 	ld	bc, #l__INITIALIZER
