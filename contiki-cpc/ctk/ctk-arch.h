@@ -36,6 +36,8 @@
 #ifndef __CTK_ARCH_H__
 #define __CTK_ARCH_H__
 
+#include "ctk-arch2.h"
+
 #if CTK_HIRES
 #include "ctk-hires.h"
 #endif 
@@ -52,7 +54,6 @@
 
 //#define ctk_arch_isprint(c) isprint(c)
 
-#include "ctk-arch2.h"
 
 
 #endif /* __CTK_ARCH_H__ */

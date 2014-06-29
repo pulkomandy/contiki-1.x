@@ -11,14 +11,6 @@
 #define ctk_arch_keyavail kbhit
 #define ctk_arch_getkey cgetc
 
-// have to undefine because of it being defined in
-// ctk-conio.h
-#undef CH_ENTER
-#undef CH_F1
-#undef CH_F3
-#undef CH_CURS_LEFT
-#undef CH_CURS_RIGHT
-
 #define CH_ENTER 0x0d
 #define CH_STOP 0x01b
 #define CH_F1 0x031
