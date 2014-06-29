@@ -64,7 +64,7 @@ architecture specific files to work). */
 #define CTK_CONF_ICONS                1 /* 107 bytes */
 
 /* Toggles support for icon bitmaps. */
-#define CTK_CONF_ICON_BITMAPS         1
+#define CTK_CONF_ICON_BITMAPS         0
 
 /* Toggles support for icon textmaps. */
 #define CTK_CONF_ICON_TEXTMAPS        1

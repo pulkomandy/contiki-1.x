@@ -23,8 +23,6 @@ _exit::
 	.area _HOME
 	.area _CODE
 	.area _INITIALIZED
-	.area   _GSINIT (REL)
-    .area   _GSFINAL (REL)
 
 	.area _DATA
 	.area _BSEG
@@ -39,6 +37,8 @@ _progend::
 	; would be in ROM, and GSINIT would copy it to RAM. Of course in that case,
 	; The initializer space can't be reclaimed for the heap...
 	.area _INITIALIZER
+	.area   _GSINIT (REL)
+    .area   _GSFINAL (REL)
 	
 ; -----------------------------------------------------------------------------
 
@@ -55,8 +55,7 @@ gsinit_next:
 ; Clear BSS sections
 	ld hl,#s__DATA
 	ld (hl),#0
-	ld de,#s__DATA
-	inc de
+	ld de,#s__DATA + #1
 	ld bc,#l__DATA
 	ldir
 
