@@ -37,14 +37,14 @@
 
 extern struct ctk_icon vnc_icon;
 /*-----------------------------------------------------------------------------------*/
-DSC(vnc_dsc,
+const DSC(vnc_dsc,
     "Remote control your PC using Contiki",
     "vnc.prg",
     vnc_init,
     &vnc_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char vncicon_bitmap[3*3*8] = {
+static const unsigned char vncicon_bitmap[3*3*8] = {
   0x00, 0x7e, 0x40, 0x73, 0x46, 0x4c, 0x18, 0x13,
   0x00, 0x00, 0xff, 0x81, 0x34, 0xc9, 0x00, 0xb6,
   0x00, 0x7e, 0x02, 0xce, 0x72, 0x32, 0x18, 0x48,
@@ -60,7 +60,7 @@ static unsigned char vncicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char vncicon_textmap[9] = {
+static const char vncicon_textmap[9] = {
   'V', 'N', 'C',
   'c', 'l', 'i',
   'e', 'n', 't'
@@ -68,7 +68,7 @@ static char vncicon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon vnc_icon =
+static const struct ctk_icon vnc_icon =
   {CTK_ICON("VNC viewer", vncicon_bitmap, vncicon_textmap)};
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

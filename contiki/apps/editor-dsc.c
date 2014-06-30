@@ -36,14 +36,14 @@
 #include "dsc.h"
 
 /*-----------------------------------------------------------------------------------*/
-DSC(editor_dsc,
+const DSC(editor_dsc,
     "A simple text editor",
     "editor.prg",
     editor_init,
     &editor_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char editoricon_bitmap[3*3*8] = {
+static const unsigned char editoricon_bitmap[3*3*8] = {
   0x00, 0x7e, 0x40, 0x73, 0x46, 0x4c, 0x18, 0x13,
   0x00, 0x00, 0xff, 0x81, 0x34, 0xc9, 0x00, 0xb6,
   0x00, 0x7e, 0x02, 0xce, 0x72, 0x32, 0x18, 0x48,
@@ -59,7 +59,7 @@ static unsigned char editoricon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char editoricon_textmap[9] = {
+static const char editoricon_textmap[9] = {
   't', 'x', 't',
   'e', 'd', 'i',
   't', 'o', 'r'

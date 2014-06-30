@@ -37,14 +37,14 @@
 
 extern struct ctk_icon dhcp_icon;
 /*-----------------------------------------------------------------------------------*/
-DSC(dhcp_dsc,
+const DSC(dhcp_dsc,
     "Obtain IP address automatically",
     "dhcp.prg",
     dhcp_init,
     &dhcp_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char tcpipconficon_bitmap[3*3*8] = {
+static const unsigned char tcpipconficon_bitmap[3*3*8] = {
   0x00, 0x79, 0x43, 0x73, 0x47, 0x77, 0x47, 0x6f,
   0x00, 0xfe, 0xfe, 0xfc, 0xfc, 0xfc, 0xf8, 0xfb,
   0x00, 0x16, 0x02, 0x00, 0x02, 0x00, 0x00, 0xc2,
@@ -60,7 +60,7 @@ static unsigned char tcpipconficon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char tcpipconficon_textmap[9] = {
+static const char tcpipconficon_textmap[9] = {
   'T', 'C', 'P',
   '/', 'I', 'P',
   'C', 'f', 'g'
@@ -68,7 +68,7 @@ static char tcpipconficon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon dhcp_icon =
+static const struct ctk_icon dhcp_icon =
   {CTK_ICON("DHCP client", tcpipconficon_bitmap, tcpipconficon_textmap)};
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

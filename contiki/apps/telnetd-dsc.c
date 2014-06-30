@@ -37,14 +37,14 @@
 
 extern struct ctk_icon telnetd_icon;
 /*-----------------------------------------------------------------------------------*/
-DSC(telnetd_dsc,
+const DSC(telnetd_dsc,
     "Telnet shell server",
     "telnetd.prg",
     telnetd_init,
     &telnetd_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char telnetdicon_bitmap[3*3*8] = {
+static const unsigned char telnetdicon_bitmap[3*3*8] = {
   0x00, 0x7f, 0x43, 0x4c, 0x58, 0x53, 0x60, 0x6f,
   0x00, 0xff, 0x00, 0x7e, 0x00, 0xff, 0x00, 0xff,
   0x00, 0xfe, 0xc2, 0x32, 0x1a, 0xca, 0x06, 0xf6,
@@ -60,7 +60,7 @@ static unsigned char telnetdicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char telnetdicon_textmap[9] = {
+static const char telnetdicon_textmap[9] = {
   't', 'e', 'l',
   'n', 'e', 't',
   's', 'r', 'v'
@@ -68,7 +68,7 @@ static char telnetdicon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon telnetd_icon =
+static const struct ctk_icon telnetd_icon =
   {CTK_ICON("Telnet server", telnetdicon_bitmap, telnetdicon_textmap)};
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

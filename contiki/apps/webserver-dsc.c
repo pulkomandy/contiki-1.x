@@ -37,14 +37,14 @@
 
 extern struct ctk_icon webserver_icon;
 /*-----------------------------------------------------------------------------------*/
-DSC(webserver_dsc,
+const DSC(webserver_dsc,
     "The Contiki web server",
     "webserver.prg",
     webserver_init,
     &webserver_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char webservericon_bitmap[3*3*8] = {
+static const unsigned char webservericon_bitmap[3*3*8] = {
   0x00, 0x7f, 0x40, 0x41, 0x44, 0x48, 0x40, 0x50,
   0x00, 0xff, 0x5a, 0x00, 0x00, 0x00, 0x3c, 0x81,
   0x00, 0xfe, 0x02, 0x82, 0x22, 0x12, 0x02, 0x0a,
@@ -60,7 +60,7 @@ static unsigned char webservericon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char webservericon_textmap[9] = {
+static const char webservericon_textmap[9] = {
   '+', '-', '+',
   '|', ')', '|',
   '+', '-', '+'
@@ -68,7 +68,7 @@ static char webservericon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon webserver_icon =
+static const struct ctk_icon webserver_icon =
   {CTK_ICON("Web server", webservericon_bitmap, webservericon_textmap)};
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

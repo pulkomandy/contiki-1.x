@@ -36,14 +36,14 @@
 #include "dsc.h"
 
 /*-----------------------------------------------------------------------------------*/
-DSC(shell_dsc,
+const DSC(shell_dsc,
     "The Contiki command shell",
     "shell.prg",
     shell_gui_init,
     &shell_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char shellicon_bitmap[3*3*8] = {
+static const unsigned char shellicon_bitmap[3*3*8] = {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -59,7 +59,7 @@ static unsigned char shellicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char shellicon_textmap[9] = {
+static const char shellicon_textmap[9] = {
   'C', 'o', 'n',
   't', 'i', 'k',
   'i', 'S', 'h'

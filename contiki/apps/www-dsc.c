@@ -37,14 +37,14 @@
 
 extern struct ctk_icon www_icon;
 /*-----------------------------------------------------------------------------------*/
-DSC(www_dsc,
+const DSC(www_dsc,
     "The Contiki web browser",
     "www.prg",
     www_init,
     &www_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char wwwicon_bitmap[3*3*8] = {
+static const unsigned char wwwicon_bitmap[3*3*8] = {
   0x00, 0x7e, 0x40, 0x73, 0x46, 0x4c, 0x18, 0x13,
   0x00, 0x00, 0xff, 0x81, 0x34, 0xc9, 0x00, 0xb6,
   0x00, 0x7e, 0x02, 0xce, 0x72, 0x32, 0x18, 0x48,
@@ -60,7 +60,7 @@ static unsigned char wwwicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char wwwicon_textmap[9] = {
+static const char wwwicon_textmap[9] = {
   'w', 'w', 'w',
   '(', ')', ' ',
   ' ', '(', ')'
@@ -68,7 +68,7 @@ static char wwwicon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon www_icon =
+static const struct ctk_icon www_icon =
   {CTK_ICON("Web browser", wwwicon_bitmap, wwwicon_textmap)};
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

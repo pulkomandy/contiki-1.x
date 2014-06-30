@@ -36,14 +36,14 @@
 #include "dsc.h"
 
 /*-----------------------------------------------------------------------------------*/
-DSC(calc_dsc,
+const DSC(calc_dsc,
     "Simple calculator",
     "calc.prg",
     calc_init,
     &calc_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char calcicon_bitmap[3*3*8] = {
+static const unsigned char calcicon_bitmap[3*3*8] = {
   0x00, 0x7f, 0x43, 0x4c, 0x58, 0x53, 0x60, 0x6f,
   0x00, 0xff, 0x00, 0x7e, 0x00, 0xff, 0x00, 0xff,
   0x00, 0xfe, 0xc2, 0x32, 0x1a, 0xca, 0x06, 0xf6,
@@ -59,7 +59,7 @@ static unsigned char calcicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char calcicon_textmap[9] = {
+static const char calcicon_textmap[9] = {
   '+', ' ', '-',
   ' ', '*', ' ',
   '=', ' ', '/'

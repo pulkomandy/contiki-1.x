@@ -37,14 +37,14 @@
 
 extern struct ctk_icon irc_icon;
 /*-----------------------------------------------------------------------------------*/
-DSC(irc_dsc,
+const DSC(irc_dsc,
     "Internet Relay Chat client",
     "irc.prg",
     irc_init,
     &irc_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char irc_icon_bitmap[3*3*8] = {
+static const unsigned char irc_icon_bitmap[3*3*8] = {
   0x00, 0x79, 0x43, 0x73, 0x47, 0x77, 0x47, 0x6f,
   0x00, 0xfe, 0xfe, 0xfc, 0xfc, 0xfc, 0xf8, 0xfb,
   0x00, 0x16, 0x02, 0x00, 0x02, 0x00, 0x00, 0xc2,
@@ -60,7 +60,7 @@ static unsigned char irc_icon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char irc_icon_textmap[9] = {
+static const char irc_icon_textmap[9] = {
   'I', 'R', 'C',
   '-', '-', '-',
   'I', 'R', 'C'
@@ -68,7 +68,7 @@ static char irc_icon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon irc_icon =
+static const struct ctk_icon irc_icon =
   {CTK_ICON("IRC client", irc_icon_bitmap, irc_icon_textmap)};
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/

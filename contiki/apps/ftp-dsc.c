@@ -37,14 +37,14 @@
 
 extern struct ctk_icon ftp_icon;
 /*-----------------------------------------------------------------------------------*/
-DSC(ftp_dsc,
+const DSC(ftp_dsc,
     "FTP client",
     "ftp.prg",
     ftp_init,
     &ftp_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char ftpicon_bitmap[3*3*8] = {
+static const unsigned char ftpicon_bitmap[3*3*8] = {
   0x00, 0x7e, 0x40, 0x73, 0x46, 0x4c, 0x18, 0x13,
   0x00, 0x00, 0xff, 0x81, 0x34, 0xc9, 0x00, 0xb6,
   0x00, 0x7e, 0x02, 0xce, 0x72, 0x32, 0x18, 0x48,
@@ -60,7 +60,7 @@ static unsigned char ftpicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char ftpicon_textmap[9] = {
+static const char ftpicon_textmap[9] = {
   'F', 'T', 'P',
   ' ', ' ', ' ',
   'F', 'T', 'P'
@@ -68,7 +68,7 @@ static char ftpicon_textmap[9] = {
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
 #if CTK_CONF_ICONS
-static struct ctk_icon ftp_icon =
+static const struct ctk_icon ftp_icon =
   {CTK_ICON("FTP client", ftpicon_bitmap, ftpicon_textmap)};
 #endif /* CTK_CONF_ICONS */
 /*-----------------------------------------------------------------------------------*/
