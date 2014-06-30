@@ -1,13 +1,35 @@
-contiki-1.x
+Contiki-1.x
 ===========
 
-The historical Contiki 1.x sources
+Contiki is a small operating system for embedded devices. While version 2 of
+the system is designed to run on embedded devices and has an IP and IPv6 stack
+as the main feature, the 1.x version of the system is better known for being
+ported to several 8-bit and 16-bit home computers.
 
-This fork is an attempt to get the CPC version of Contiki 1.x running again.
-The port never left the proof of concept stage and could use some love.
+Contiki 1.x features a GUI, dynamic loading of executables with runtime
+relocation, and a cooperative multitasking event-driven kernel. It also includes
+an IPv4 network stack and a few other things.
 
-The build has been fixed to work with a current SDCC (3.4) but currently the OS
-(contiki.bin) will crash right after loading. Some debugging will be needed.
+This fork is focused on improving the Amstrad CPC port of Contiki. This version
+was done by Kevin Thacker, but he didn't get it much further than showing the
+desktop. At the time, problems with the SDCC compiler and lack of proper
+optimization support led to a Contiki kernel too big and slow to be useful for
+serious use.
+
+Fast forward some years, and SDCC has improved a lot. While it's still not
+very good at generating fast code, at least the size is down a bit and we now
+can run several programs without running out of memory. The linker scripts you
+will find here were modified to work properly with the current version of SDCC.
+
+However, the dynamic relocatable executables are generated with a patched
+version of the SDCC linker, as the existing linker doesn't allow output in a
+suitable format.
+
+Compared to the binaries released by Kevin Thacker, this version is a bit faster
+because of slightly improved screen drawing routines. The performance is still
+far from optimal, but we have a plan to improve this (see the roadmap below).
+Also, reverse video support was disabled because the way it is done in Contiki
+and in the CPC firmware are not directly compatible.
 
 How to build it
 ===============
