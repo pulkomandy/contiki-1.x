@@ -57,47 +57,112 @@ not supported). Then from the BASIC prompt type
 
   run"contiki
 
-Contiki will take over the space allocated to BASIC and run there. Addresses
-100-4500 are for the code and internal variables. Between 4500 and A7FF is the
-heap memory, which is dynamically allocated to the different programs you may
-want to run. The heap size depends on the Contiki program size (low address)
-and use of memory by the CPC firmware and expansion ROMs (high address).
+The Contiki desktop will start, and will load the "Welcome" program which shows
+a window with some hints about how to use the system. Once there, you can:
 
-Contiki is firmware-friendly and uses the CPC firmware for all IO operations
-(disk access, screen drawing, etc).
+ * Navigate the menus (press F1 then use arrow keys)
+ * Run the "Processes" program to see a list of running processes
+ * Run the "Directory" program to list the disc contents
 
-Future plans
-============
+Using either Directory or the "Run program" menu, you can start more applications,
+such as the calculator, the command line shel, the about box, etc. You can start
+multiple instances of each application, and navigate between their windows using
+the "Desktop" menu.
 
-A lot of ideas are floating around...
+Roadmap
+=======
 
-* Write a native CTK driver and stop using conio. Even when still using the
-firmware, this could improve drawing performance further and allow us to make
-things look nicer.
-* Stop using the firmware for graphics and disc access. Use a 6x8 font to
-have more space on screen.
-* Move Contiki to bank C7. Layout would look like this:
-  - In main RAM, 0000-7FFF used for 32K screen+interrupt vectors
-  - 8000-BFFF used for various internals code (screen drawing and font, probably)
-  - In banks C4-C6 and start of C7, have the heap where apps are loaded.
-  - Contiki kernel in bank C7 can be accessed by apps, and can access main RAM
-  as needed.
-  - The remaining central RAM bank can be mapped at 4000 and hold some code (FS
-  access?)
+This port of Contiki is running fairly well, but we can make it more awesome!
 
-System would run with all banks in main RAM, unless drawing to screen or doing
-FS access. In these case we would map C7 at C000-FFFF and the main RAM in the
-other slots.
+Current status
+--------------
+
+Contiki currently relies on the CPC firmware for screen drawing and on AMSDOS
+for disc access. It runs entirely in the 64K base memory and doesn't use the
+banks or other expansion ROMs.
+
+Contiki uses the space usually reserved to BASIC, from &100 to &3700, for its
+kernel. Since the Firmware and AMSDOS reserve all memory from &A700 up, this 
+leaves about 28K of free RAM for applications. Not bad, but we can do better.
+
+Firmware-based CTK driver
+-------------------------
+
+The screen driver is using the standard "conio" driver from Contiki. This is a
+textmode based driver which is easily portable between different terminal types.
+However, the interface of this driver with the CPC firmware results in rather
+slow screen drawing. The main reason is that some operations (such as erasing
+or scrolling part of the screen) are done character by character, instead of
+using the firmware functions which are much faster. Moreover, the portable conio
+code is written in C, and replacing it with an assembler version would provide
+another speed boost.
+
+Some extra features such as bitmap icons, a custom character set and more can
+be implemented here.
+
+Make use of memory banks
+------------------------
+
+We can put Contiki in bank C7 and map it in C1 mode. This would free all the low
+memory for apps. When calling the firmware, we can either use "far calls" so the
+bank can be unmapped while drawing, or use mode C3 and tell the firmware to draw
+at address 4000.
+
+Note that the firmware calls are designed not to take direct memory pointers
+most of the time (eg you can print a single character, not a whole string) to
+make such schemes workable: The firmware would never need to directly access
+application memory in the range 4000-7fff. This would leave about 42K of RAM
+free for apps.
+
+Remove dependencies on firmware
+-------------------------------
+
+The next step is to completely remove the dependency on the firmware, and instead
+write our own screen drawing routines. A 4x8 or 6x8 font could be used, as the
+"80 column" version of Contiki for C64 is doing.
+
+This could further speedup the screen display and allow for a nicer look.
+
+Overscan display
+----------------
+
+A nice feature on the CPC is the ability to allocate 32K of RAM for the display
+and have a quite high resolution screen (380x272 or so). However, with the
+scheme exposed above this would lead to having only 32K of RAM free for applications.
+
+To avoid this, we would run Contiki in C2 banking mode (all memory is mapped in
+banks) and have the application heap there. Contiki would still be in bank C7
+leaving 48K of RAM for apps. When drawing to the screen is needed, Contiki can
+switch to mode C1 or C3 to access the main memory. A scheme similar to the one
+used by the firmware needs to be used here: the screen drawing routines must
+not do direct access to applications.
+
+Pages 0 and 1 in main RAM would be used for the screen. Page 2 will have the
+screen drawing code. Page 3 can be used for the filesystem, and use the C4-C7
+mapping mode to access the banks. When using these modes, converting a pointer
+to page number + pointer in 4000-7fff is easy. It may be a good idea to tweak
+malloc so it never allocates a chunk that crosses two banks. But that would mean
+we can't load apps bigger than 16K. So the disk system will probably have to
+figure out how to handle allocations that spans two or more banks.
+
+Even more free RAM!
+-------------------
 
 Going even further, Contiki should all be in main RAM, and leave the banks
 almost completely free for apps. This would need to use an RST (far call or so)
 to call Contiki methods from apps. Can SDCC handle this? We may need to generate
 syscall inlines or maybe we can do dirty tricks using the peephole to replace
 "CALL address" with "RST farcall ; dw address". This could leave 63+K of RAM
-for apps, and 32K of RAM for Contiki.
+for apps, and 32K of RAM for Contiki + screen drawing + FS. If space is scarce,
+it's probably time we try putting Contiki in one or two ROMs instead.
 
-In either case, when an app call the system, it may pass it a pointer to
-something. In order to parse the data, Contiki will need to map the right
-page at &4000. Making sure malloc never allocated a zone crossing page
-boundaries is a good idea here. This way any pointer can be used with a simple
-remapping of the two highest bytes.
+This is similar to the scheme used by CP/M+.
+
+PCW port
+--------
+
+The amstrad PCW has a similar, but more flexible, RAM bank system. However, it
+comes with 256 or 512K of memory, and we must support this!. This means reworking
+Contiki to handle apps in the different banks, which is not an easy task and
+may need compiler specific support. But then again, it could be useful for a
+Thomson MO6/TO8 port...
