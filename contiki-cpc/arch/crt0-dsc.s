@@ -11,7 +11,6 @@ _main:
 	;; Ordering of segments for the linker.
 	.area	_HOME (REL)
 	.area	_CODE (REL)
-	.dw 0 ; Will be replaced by relocation data
     .area   _GSINIT (REL)
     .area   _GSFINAL (REL)
         

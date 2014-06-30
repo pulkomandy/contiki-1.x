@@ -86,7 +86,7 @@ CFLAGS:=$(CFLAGSCOMMON) --compile-only \
 
 # conversion of intel hex record to binary, cpc binary with header, then inject into disc image
 define MAKE_DSC
-echo -ihn $(@:.dsc=.ihx) > $@.lnk
+echo -in $(@:.dsc=.ihx) > $@.lnk
 	echo arch/crt0-dsc.o >> $@.lnk
 	echo $< >> $@.lnk
 	echo -e >> $@.lnk

@@ -1,5 +1,6 @@
 #include "loader.h"
 #include "rel.h"
+#include "log.h"
 #include <stddef.h>
 #include <malloc.h>
 
@@ -10,11 +11,6 @@ struct prg_hdr {
 	char arch[8];
 	char version[8];
 	char initfunc[1];
-};
-
-struct dsc_hdr {
-	char *relocatedata;
-	struct dsc dscdata;
 };
 
 unsigned char loader_arch_load(const char *name, char *arg)
@@ -46,10 +42,23 @@ unsigned char loader_arch_load(const char *name, char *arg)
 	return LOADER_OK;
 }
 
+
+static void relocate_dsc(struct dsc* data, int loadaddr)
+{
+	data->description += loadaddr;
+	data->prgname += loadaddr;
+	data->icon = (struct ctk_icon*)(((char*)data->icon)+ loadaddr);
+
+	data->icon->title += loadaddr;
+	//data->icon->bitmap += loadaddr;
+	data->icon->textmap += loadaddr;
+}
+
+
 struct dsc *loader_arch_load_dsc(const char *name)
 {
 	char *loadaddr;
-	struct dsc_hdr *dschdr;
+	struct dsc *dschdr;
 	int length;
 
 	/* get length of file */
@@ -65,11 +74,11 @@ struct dsc *loader_arch_load_dsc(const char *name)
 	/* load the file */
 	load_file(name, loadaddr);
 	
-	dschdr = (struct dsc_hdr *)loadaddr;
+	dschdr = (struct dsc *)loadaddr;
 	/* relocate it */
-	relocate(dschdr->relocatedata, loadaddr);
+	relocate_dsc(dschdr, (int)loadaddr);
 
-	return &dschdr->dscdata;
+	return dschdr;
 }
 
 void loader_arch_free(void *loadaddr)
@@ -83,11 +92,6 @@ void loader_arch_free(void *loadaddr)
 
 void loader_arch_free_dsc(struct dsc *dscdata)
 {
-	/* we're given the start of 'dsc' member of the dsc_hdr,
-	calculate the real start address and then free the block */
-	void *header = (void *)((char *)dscdata - 2);
-//offsetof(struct 
-//dsc_hdr,dscdata));
-	free(header);
+	free(dscdata);
 }
 
