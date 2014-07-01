@@ -66,7 +66,6 @@ CONTIKI_OBJ= ./arch/crt0.o \
 	./loader/loader-arch-cpc.o \
 	./arch/putchar.o \
 	./arch/uip.o \
-	./arch/conio.o \
 	./apps/configedit.o \
 	./apps/configedit-dsc.o \
 	../contiki/apps/directory.o \
@@ -75,7 +74,6 @@ CONTIKI_OBJ= ./arch/crt0.o \
 	../contiki/apps/processes-dsc.o \
 	../contiki/apps/program-handler.o \
 	../contiki/ctk/ctk.o \
-	../contiki/ctk/ctk-conio-service.o \
 	../contiki/ctk/ctk-draw.o \
 	../contiki/ctk/ctk-term-in.o \
 	../contiki/ctk/ctk-term-out.o \
@@ -99,7 +97,6 @@ CONTIKI_OBJ= ./arch/crt0.o \
 	./arch/arch.o \
 	./lib/strcasecmp.o \
 	$(UIP)
-
 
 contiki: $(CONTIKI_OBJ)
 	$(LD) -f arch/contiki.lnk
