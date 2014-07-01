@@ -23,6 +23,8 @@ struct _MEMHEADER
 
 extern char progend;
 
+unsigned int _heapmaxavail;
+
 static MEMHEADER *firstheader;
 /* setup two headers. One at start of free ram, second at end of free ram.
  *
@@ -38,10 +40,10 @@ _sdcc_heap_init(void)
   MEMHEADER *lastheader;
   int ramend;
 
-  /* this is our first mem header */
+  /* this is our first mem header - right after the end of the code area */
   firstheader = (MEMHEADER *)(&progend);
   
-  /* this is the size of ram available */
+  /* this is the size of ram available - read from firmware */
   ramend = *(int*)(0xb8e8);
 
   /* calc address of last header */
@@ -56,6 +58,8 @@ _sdcc_heap_init(void)
   firstheader->next = lastheader;
   firstheader->prev       = NULL; //and mark first as first
   firstheader->len        = 0;    //Empty and ready.
+
+  _heapmaxavail = ramend - &progend;
 }
 
 void *
@@ -138,6 +142,20 @@ free (void *p)
         }
     }
 }
+
+
+/* Compute free memory */
+unsigned int _heapmemavail()
+{
+	unsigned int avail = _heapmaxavail;
+  	MEMHEADER* header; 
+		
+	for (header = firstheader; header; header = header->next)
+		avail -= header->len + sizeof(MEMHEADER);
+
+	return avail;
+}
+
 
 #else
 
