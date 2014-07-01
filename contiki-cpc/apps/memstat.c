@@ -39,6 +39,9 @@
 #include "ek.h"
 #include "loader.h"
 
+extern unsigned int _heapmemavail();
+extern unsigned int _heapmaxavail;
+
 static struct ctk_window window;
 static struct ctk_label freemsg =
   {CTK_LABEL(2, 0, 12, 1, "Free memory:")};
@@ -47,7 +50,7 @@ static struct ctk_label freenum =
   {CTK_LABEL(18, 0, 5, 1, freemem)};
 
 static struct ctk_label lblockmsg =
-  {CTK_LABEL(2, 2, 14, 1, "Largest block:")};
+  {CTK_LABEL(2, 2, 14, 1, "Heap size:")};
 static char lblock[6];
 static struct ctk_label lblocknum =
   {CTK_LABEL(18, 2, 5, 1, lblock)};
@@ -66,11 +69,12 @@ EK_PROCESS(p, "Memory statistics", EK_PRIO_NORMAL,
 	   memstat_eventhandler, NULL, NULL);
 static ek_id_t id = EK_ID_NONE;
 
+
 /*-----------------------------------------------------------------------------------*/
 static void
 update(void)
 {
-  int mem;
+  unsigned int mem;
 
   mem = _heapmemavail();
   freemem[0] = (mem/10000) % 10 + '0';
@@ -79,7 +83,7 @@ update(void)
   freemem[3] = (mem/10) % 10 + '0';
   freemem[4] = (mem) % 10 + '0';
 
-  mem = _heapmaxavail();
+  mem = _heapmaxavail;
   lblock[0] = (mem/10000) % 10 + '0';
   lblock[1] = (mem/1000) % 10 + '0';
   lblock[2] = (mem/100) % 10 + '0';

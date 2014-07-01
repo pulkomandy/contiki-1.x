@@ -63,7 +63,8 @@ all: 	./arch/crt0-dsc.o \
 	./apps/config.prg \
 	./apps/confedit.prg \
 	./apps/confedit.dsc \
-	../contiki/apps/shell.prg ../contiki/apps/shell.dsc 
+	../contiki/apps/shell.prg ../contiki/apps/shell.dsc \
+    ./apps/memstat.prg ./apps/memstat.dsc
 #	$(UIP_PRGS) \
 
 #	./cfs-cpc.drv \
@@ -73,7 +74,6 @@ all: 	./arch/crt0-dsc.o \
 #	./slip.drv slip.dsc \
 #	./cgterm.prg cgterm.dsc \
 
-#	./apps/memstat.prg ./apps/memstat.dsc \
 
 SYS=cpc
 
