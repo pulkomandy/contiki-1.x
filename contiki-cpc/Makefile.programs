@@ -219,12 +219,8 @@ endef
 ../contiki/apps/splip.drv: slip-drv.o rs232dev.o
 
 
-VNC=../contiki/apps/vnc.o \
-	../contiki/apps/vnc-viewer.o \
-	./apps/vnc-draw.o 
-
 ../contiki/apps/conio.prg: \
-	../contiki/ctk/ctk-conio-service.o \
+	./ctk/ctk-conio-service.o \
 	./arch/conio.o
 	$(MAKE_PRG)
 
@@ -237,6 +233,10 @@ ctk-default.drv: ctk-hires-service.o
 default.prg: themeloader.o ctk-hires-theme-default.o
 
 
+
+VNC=../contiki/apps/vnc.o \
+	../contiki/apps/vnc-viewer.o \
+	./apps/vnc-draw.o 
 
 ../contiki/apps/vnc.prg: $(VNC)
 	$(MAKE_PRG)
