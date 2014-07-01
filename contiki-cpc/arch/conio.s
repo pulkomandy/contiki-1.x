@@ -5,6 +5,11 @@
 
 ;; contiki uses coordinates between 0..width-1, 0..height-1
 ;; cpc uses coordinates between 1..width, 1..height
+
+
+
+
+
 ; void clrscr (void);
 ; Clear the whole screen and put the cursor into the top left corner 
 ; TESTED
@@ -14,8 +19,7 @@
 
 _clrscr::
 		ld		a,#1
-		call 	0xBC0E	; SCR SET MODE
-		ret
+		jp 	0xBC0E	; SCR SET MODE
 
 
 ; void gotox (unsigned char x);
@@ -28,8 +32,7 @@ _gotox::
 		add		hl,sp
 		ld		a,(hl)
 		inc		a
-		call	0xBB6F	; TXT SET COLUMN
-		ret
+		jp	0xBB6F	; TXT SET COLUMN
 
 ; void gotoy (unsigned char y);
 ; Set the cursor to the specified Y position, leave the X position untouched
@@ -41,8 +44,7 @@ _gotoy::
 		add		hl,sp
 		ld		a,(hl)
 		inc		a
-		call	0xBB72	; TXT SET ROW
-		ret
+		jp	0xBB72	; TXT SET ROW
 
 ; void gotoxy (unsigned char x, unsigned char y)
 ; Set the cursor to the specified position 
@@ -59,8 +61,7 @@ _gotoxy::
 		ld h,a
 		inc h
 		inc l
-		call	0xBB75	; TXT SET CURSOR
-		ret
+		jp	0xBB75	; TXT SET CURSOR
 
 ; unsigned char wherex (void);
 ; Return the X position of the cursor 
@@ -83,19 +84,6 @@ _wherey::
 		dec l
 		ret
 
-.globl _outchar
-
-_outchar::
-		push af
-		push bc
-		push de
-		push hl
-		call 0xbb5d
-		pop hl
-		pop de
-		pop bc
-		pop af
-		ret
 
 ; void cputc (char c);
 ; Output one character at the current cursor position
@@ -106,8 +94,8 @@ _cputc::
 		ld		hl,#2
 		add		hl,sp
 		ld		a,(hl)
-		call	_outchar	; TXT OUTPUT
-		ret
+		jp		0xbb5b	; TXT OUTPUT
+
 
 ; void cputcxy (unsigned char x, unsigned char y, char c)
 ; Same as "gotoxy (x, y); cputc (c);"
@@ -127,8 +115,7 @@ _cputcxy::
 		inc l
 		call	0xBB75	; TXT SET CURSOR
 		ld		a,e		
-		call	_outchar
-		ret
+		jp	0xbb5d
 
 ; void cputs (const char* s);
 ; Output a NUL terminated string at the current cursor position 
@@ -148,7 +135,11 @@ cputs$:
 		inc de
 		or a
 		ret		z
-		call	_outchar
+		push de
+		push af
+		call	0xbb5d
+		pop af
+		pop de
 		jr		cputs$
 
 ; void cputsxy (unsigned char x, unsigned char y, const char* s);
@@ -157,18 +148,17 @@ cputs$:
 .globl _cputsxy
 
 _cputsxy::
-		ld		hl,#4
+		ld		hl,#2
 		add		hl,sp
 		ld		e,(hl)
 		inc		hl
 		ld		d,(hl)
 
-		ld		hl,#2
-		add		hl,sp
 		ld		a,(hl)
 		inc 		hl
 		ld		l,(hl)
 		ld 		h,a		
+		ex de,hl
 		inc h
 		inc l
 		call	0xBB75	; TXT SET CURSOR
@@ -183,11 +173,8 @@ _cputsxy::
 .globl _revers
 
 _revers::
-		; BB9C swaps foreground and background colors, rather than inverting 
-		; the characters. As a result, textcolor and bgcolor are confused.
-		; Disable this for now...
-		;jp	0xBB9C	; TXT INVERSE
-		ret
+	ret
+
 
 
 ; unsigned char textcolor (unsigned char color);
@@ -258,9 +245,13 @@ _chline::
 		or		a
 		ret		z
 		ld		b,a
-		ld a,#0x09a
+dochline$:
+		ld c,#0x09a
 chlineloop$:
-		call	_outchar
+		push bc
+		ld a,c
+		call	0xbb5d
+		pop bc
 		djnz    chlineloop$
 		ret
 
@@ -286,11 +277,7 @@ _chlinexy::
 		inc h
 		inc l
 		call	0xBB75
-		ld		a,#0x9a  ; Horizontal line char.
-chxyloop$:
-		call	_outchar ; TXT OUT
-		djnz	chxyloop$
-		ret
+		jr dochline$
 
 ; void cvline (unsigned char length);
 ; Output a vertical line with the given length at the current cursor
@@ -306,15 +293,19 @@ _cvline::
 		ret		z
 		ld		b,a
 		call	0xBB78  ; TXT GET CURSOR
-		ld a,#0x095
+docvline$:
+		ld c,#0x095
 cvloop$:
-		push af
 		push hl
-		call	0xBB75
+		push bc
+		call	0xBB75 ; TXT SET CURSOR
+		pop bc
+		push bc
+		ld a,c
+		call	0xbb5d
+		pop bc
 		pop hl
-		pop af
 		inc l
-		call	_outchar
 		djnz	cvloop$
 		ret
 
@@ -338,17 +329,7 @@ _cvlinexy::
 		ld		l,e
 		inc 		h
 		inc 		l
-		ld a,#149
-cvxyloop$:
-		push hl
-		push af
-		call	0xBB75
-		pop af
-		pop hl
-		inc		l
-		call	_outchar
-		djnz	cvxyloop$
-		ret
+		jr docvline$
 
 ; void cclear (unsigned char length);
 ; Clear part of a line (write length spaces).
@@ -359,9 +340,12 @@ _cclear::
 		ld		hl,#2
 		add		hl,sp
 		ld		b,(hl)
-		ld		a,#0x020 ; White space
+		ld		c,#0x020 ; White space
 cclearloop$:
-		call	_outchar
+		push bc
+		ld a,c
+		call	0xbb5d
+		pop bc
 		djnz	cclearloop$
 		ret
 
@@ -378,7 +362,6 @@ _cclearxy::
 		ld		e,(hl) ; Y
 		inc		hl
 
-		push af
 		ld		a,(hl) ; Length
 
 		; E is BOTTOM
@@ -391,14 +374,12 @@ _cclearxy::
 		add		d
 		ld		d,a
 
-		; TODO ink mask
+		; ink mask
 		call	0xBB99 ; TXT GET PAPER
 		call	0xBC2C ; SCR INK ENCODE
 
-		call	0xBC44 ; SCR FILL BOX
+		jp	0xBC44 ; SCR FILL BOX
 
-		pop af
-		ret
 
 ; void screensize (unsigned char* x, unsigned char* y);
 ; Return the current screen size.
@@ -425,6 +406,3 @@ _screensize::
 		ld		(de),a
 		ret
 
-; void cputhex8 (unsigned char val);
-; void cputhex16 (unsigned val);
-; These shouldn't be here... 
