@@ -273,9 +273,10 @@ shell_eventhandler(ek_event_t ev, ek_data_t data)
 	cfs_closedir(&dir);
 	showingdir = 0;
 	inttostr(size, totsize);
-	shell_output("Total number of blocks: ", size);
+	shell_output("Total number of blocks:", size);
 	shell_prompt("contiki-c64> ");
       } else {
+		  dirent.size >>= 10;
 	totsize += dirent.size;
 	inttostr(size, dirent.size);
 	shell_output(size, dirent.name);
