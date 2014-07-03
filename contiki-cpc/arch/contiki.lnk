@@ -20,7 +20,6 @@
 ../contiki/lib/list.o
 ../contiki/lib/timer.o
 ./apps/directory-dsc.o
-./apps/configedit-dsc.o
 ../contiki/apps/processes-dsc.o
 ./arch/main.o
 ./arch/arch.o
