@@ -43,7 +43,7 @@ const static struct ctk_label welcomelabel1 =
 const static struct ctk_label welcomelabel2 =
   {CTK_LABEL(2, 4, 28, 1, "F1     - open menus")};
 const static struct ctk_label welcomelabel3 =
-  {CTK_LABEL(2, 6, 28, 1, "F3     - cycle windows")};
+  {CTK_LABEL(2, 6, 28, 1, "F2     - cycle windows")};
 const static struct ctk_label welcomelabel4 =
   {CTK_LABEL(2, 8, 28, 1, "F7     - select up")};
 const static struct ctk_label welcomelabel5 =
