@@ -82,6 +82,21 @@ s_ctk_draw_init(void)
   screensize(&sizex, &sizey);
 }
 /*-----------------------------------------------------------------------------------*/
+
+
+static void customchr(unsigned char* data) __naked
+{
+    __asm
+	pop de
+	pop hl
+	push hl
+	push de
+	ld a,#0xff
+	jp 0xbba8 ; SCR SET MATRIX
+    __endasm;
+}
+
+
 static void
 draw_widget(struct ctk_widget *w,
 	    unsigned char x, unsigned char y,
@@ -197,8 +212,31 @@ draw_widget(struct ctk_widget *w,
     revers(0);
     break;
   case CTK_WIDGET_ICON:
+
     if(ypos >= clipy1 && ypos < clipy2) {
       revers(wfocus != 0);
+#if CTK_CONF_ICON_BITMAPS
+      gotoxy(xpos, ypos);
+      if(w->widget.icon.bitmap != NULL) {
+	  unsigned char* ptr  = w->widget.icon.bitmap;
+	  printf("ICON BMP %p\r\n", ptr);
+	for(i = 0; i < 3; ++i) {
+	  gotoxy(xpos, ypos);
+	  if(ypos >= clipy1 && ypos < clipy2) {
+	    customchr(ptr);
+	    cputc(0xff);
+	    ptr += 8;
+	    customchr(ptr);
+	    cputc(0xff);
+	    ptr += 8;
+	    customchr(ptr);
+	    cputc(0xff);
+	    ptr += 8;
+	  }
+	  ++ypos;
+	}
+      }
+#elif CTK_CONF_ICON_TEXTMAPS
       gotoxy(xpos, ypos);
       if(w->widget.icon.textmap != NULL) {
 	for(i = 0; i < 3; ++i) {
@@ -211,6 +249,7 @@ draw_widget(struct ctk_widget *w,
 	  ++ypos;
 	}
       }
+#endif
       x = xpos;
   
       len = strlen(w->widget.icon.title);

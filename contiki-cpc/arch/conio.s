@@ -39,7 +39,11 @@ _clrscr::
 		; FOCUS
 		LD A,#3
 		LD BC,#0x0000 ; BLACK
-		JP 0xBC32 ; SCR SET INK
+		CALL 0xBC32 ; SCR SET INK
+
+		LD DE,#255
+		LD HL,#0xbe80
+		jp 0xbbab ; TXT SET M TABLE
 
 
 ; void gotox (unsigned char x);
@@ -75,9 +79,9 @@ _gotoy::
 _gotoxy::
 		ld		hl,#2
 		add		hl,sp
-		ld 		a,(hl)
+		ld a,(hl)
 		inc hl
-		ld 		l,(hl)
+		ld l,(hl)
 		ld h,a
 		inc h
 		inc l
@@ -144,12 +148,11 @@ _cputcxy::
 .globl _cputs
 
 _cputs::
-		ld		hl,#2
-		add		hl,sp
-		ld		e,(hl)
-		inc 		hl
-		ld		d,(hl)
-		
+        ld              hl,#2
+        add             hl,sp
+        ld              e,(hl)
+        inc             hl
+        ld              d,(hl)
 cputs$:
 		ld		a,(de)
 		inc de

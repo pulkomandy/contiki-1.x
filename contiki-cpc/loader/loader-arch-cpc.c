@@ -50,8 +50,12 @@ static void relocate_dsc(struct dsc* data, int loadaddr)
 	data->icon = (struct ctk_icon*)(((char*)data->icon)+ loadaddr);
 
 	data->icon->title += loadaddr;
-	//data->icon->bitmap += loadaddr;
+#if CTK_CONF_ICON_BITMAPS
+	data->icon->bitmap += loadaddr;
+#endif
+#if CTK_CONF_ICON_TEXTMAPS
 	data->icon->textmap += loadaddr;
+#endif
 }
 
 
