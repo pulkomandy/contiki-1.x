@@ -91,8 +91,19 @@ static void customchr(unsigned char* data) __naked
 	pop hl
 	push hl
 	push de
+	; Can't use SCR SET MATRIX because some of our icons are in RAM under 0x4000.
+	; SCR SET MATRIX then gets data from the firmware ROM...
+	ld a,#0x19
+	call 0xBB5a
 	ld a,#0xff
-	jp 0xbba8 ; SCR SET MATRIX
+	call 0xBB5a
+	ld b,#8
+00001$:
+	ld a,(hl)
+	call 0xbb5a
+	inc hl
+	djnz 00001$
+	ret
     __endasm;
 }
 
@@ -219,7 +230,6 @@ draw_widget(struct ctk_widget *w,
       gotoxy(xpos, ypos);
       if(w->widget.icon.bitmap != NULL) {
 	  unsigned char* ptr  = w->widget.icon.bitmap;
-	  printf("ICON BMP %p\r\n", ptr);
 	for(i = 0; i < 3; ++i) {
 	  gotoxy(xpos, ypos);
 	  if(ypos >= clipy1 && ypos < clipy2) {
@@ -299,7 +309,7 @@ s_ctk_draw_widget(struct ctk_widget *w,
 /*-----------------------------------------------------------------------------------*/
 
 static void clearrect(unsigned char x2, unsigned char y2,
-	unsigned char x1, unsigned char y1)
+	unsigned char x1, unsigned char y1) __naked
 {
   __asm
 		ld		hl,#2
@@ -340,6 +350,9 @@ s_ctk_draw_clear_window(struct ctk_window *window,
     
   i = window->y + 2; // +1 for the border, +1 for ctk > cpc conversion
   h = i + window->h;
+
+  if (i >= clipy2 || h < clipy1)
+	  return;
 
   if (i < clipy1) i = clipy1;
   --clipy2;
@@ -509,7 +522,8 @@ s_ctk_draw_clear(unsigned char y1, unsigned char y2) __naked
 		ld		l,d
 		ld d,#40
 
-		inc e
+		dec e
+		;inc e
 
 		call	0xBB99 ; TXT GET PAPER
 		call	0xBC2C ; SCR INK ENCODE
