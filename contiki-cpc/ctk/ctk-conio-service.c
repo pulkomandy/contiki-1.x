@@ -78,8 +78,8 @@ s_ctk_draw_init(void)
 {
   (void)bgcolor(SCREENCOLOR);
   (void)bordercolor(BORDERCOLOR);
+  clrscr();
   screensize(&sizex, &sizey);
-  ctk_draw_clear(0, sizey);
 }
 /*-----------------------------------------------------------------------------------*/
 static void
@@ -259,8 +259,8 @@ s_ctk_draw_widget(struct ctk_widget *w,
 }
 /*-----------------------------------------------------------------------------------*/
 
-static void clearrect(unsigned char x1, unsigned char y1,
-	unsigned char x2, unsigned char y2)
+static void clearrect(unsigned char x2, unsigned char y2,
+	unsigned char x1, unsigned char y1)
 {
   __asm
 		ld		hl,#2
@@ -299,12 +299,14 @@ s_ctk_draw_clear_window(struct ctk_window *window,
   }
   */
     
-  h = window->y + 2 + window->h;
+  i = window->y + 2; // +1 for the border, +1 for ctk > cpc conversion
+  h = i + window->h;
 
-  clearrect(
-		  window->x + window->w, h,
-		  window->x + 1, window->y + 2
-		  );
+  if (i < clipy1) i = clipy1;
+  --clipy2;
+  if (h > clipy2) h = clipy2;
+
+  clearrect(window->x + window->w, h, window->x + 1, i);
 }
 /*-----------------------------------------------------------------------------------*/
 static void

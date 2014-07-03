@@ -19,7 +19,27 @@
 
 _clrscr::
 		ld		a,#1
-		jp 	0xBC0E	; SCR SET MODE
+		call 	0xBC0E	; SCR SET MODE
+
+		; BACKGROUND
+		XOR A
+		LD BC,#0x0D0D ; GREY
+		CALL 0xBC32 ; SCR SET INK
+
+		; BORDERS
+		LD A,#1
+		LD BC,#0x0e0e ; BLUE
+		CALL 0xBC32 ; SCR SET INK
+
+		; WIDGETS
+		LD A,#2
+		LD BC,#0x1a1a ; WHITE
+		CALL 0xBC32 ; SCR SET INK
+
+		; FOCUS
+		LD A,#3
+		LD BC,#0x0000 ; BLACK
+		JP 0xBC32 ; SCR SET INK
 
 
 ; void gotox (unsigned char x);
