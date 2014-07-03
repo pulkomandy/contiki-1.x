@@ -36,5 +36,9 @@
 #define __PROGRAM_HANDLER_CONF_H__
 
 #define PROGRAM_HANDLER_CONF_MAX_NUMDSCS 10
+#define PROGRAM_HANDLER_CONF_QUIT_MENU   1
+
+#define EXIT_SUCCESS 0
+void exit(int);
 
 #endif /* __PROGRAM_HANDLER_CONF_H__ */

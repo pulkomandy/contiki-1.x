@@ -18,7 +18,7 @@ init:
 	call	_main
 
 _exit::
-	ret
+	rst #0
 
 	.area _HOME
 	.area _CODE
