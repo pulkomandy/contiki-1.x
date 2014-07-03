@@ -25,11 +25,16 @@ However, the dynamic relocatable executables are generated with a patched
 version of the SDCC linker, as the existing linker doesn't allow output in a
 suitable format.
 
-Compared to the binaries released by Kevin Thacker, this version is a bit faster
-because of slightly improved screen drawing routines. The performance is still
-far from optimal, but we have a plan to improve this (see the roadmap below).
-Also, reverse video support was disabled because the way it is done in Contiki
-and in the CPC firmware are not directly compatible.
+Compared to the binaries released by Kevin Thacker, this version has much
+improved drawing routines. While still using the CPC firmware, the following
+changes allow for a much better experience:
+
+ * Faster screen clearing using SCR FILL BOX
+ * Various optimizations all over the place
+ * A better looking color palette
+ * Support for bitmap icons
+
+![Screenshot of Contiki on CPC](/screenshot.png?raw=true "The Contiki Desktop.")
 
 How to build it
 ===============
