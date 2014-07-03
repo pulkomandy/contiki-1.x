@@ -44,7 +44,7 @@ DSC(ssfire_dsc,
     &ssfire_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char ssfireicon_bitmap[3*3*8] = {
+static const unsigned char ssfireicon_bitmap[3*3*8] = {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -60,13 +60,13 @@ static unsigned char ssfireicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char ssfireicon_textmap[9] = {
+static const char ssfireicon_textmap[9] = {
   '.', ' ', '.',
   'o', ' ', 'o',
   'O', ' ', 'O'
 };
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
-static struct ctk_icon ssfire_icon =
+static const struct ctk_icon ssfire_icon =
   {CTK_ICON("Fire", ssfireicon_bitmap, ssfireicon_textmap)};
 /*-----------------------------------------------------------------------------------*/

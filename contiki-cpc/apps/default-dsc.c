@@ -44,7 +44,7 @@ DSC(default_dsc,
     &default_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char defaulticon_bitmap[3*3*8] = {
+static const unsigned char defaulticon_bitmap[3*3*8] = {
   0xff,0xff,0xc0,0xcf,0xc0,0xc3,0xc0,0xc0,
   0xff,0xff,0x00,0xff,0x00,0xff,0x00,0x00,
   0xff,0xfc,0x00,0xf0,0x00,0xc0,0x00,0x00,
@@ -58,13 +58,13 @@ static unsigned char defaulticon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char defaulticon_textmap[9] = {
+static const char defaulticon_textmap[9] = {
   '+', '=', '+',
   '|', 'D', '|',
   '+', '-', '+'
 };
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
-static struct ctk_icon default_icon =
+static const struct ctk_icon default_icon =
   {CTK_ICON("Default", defaulticon_bitmap, defaulticon_textmap)};
 /*-----------------------------------------------------------------------------------*/

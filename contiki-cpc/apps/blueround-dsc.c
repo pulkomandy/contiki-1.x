@@ -44,7 +44,7 @@ DSC(blueround_dsc,
     &blueround_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char blueroundicon_bitmap[3*3*8] = {
+static const unsigned char blueroundicon_bitmap[3*3*8] = {
   0xfe,0xf8,0xe0,0xc0,0xc0,0x80,0x80,0x00,
   0x00,0x55,0xaa,0x00,0xaa,0x00,0x00,0x00,
   0x7f,0x1f,0x07,0x03,0x03,0x01,0x01,0x00,
@@ -60,13 +60,13 @@ static unsigned char blueroundicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char blueroundicon_textmap[9] = {
+static const char blueroundicon_textmap[9] = {
   '(', '=', ')',
   '|', 'o', '|',
   '(', '-', ')'
 };
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
-static struct ctk_icon blueround_icon =
+static const struct ctk_icon blueround_icon =
   {CTK_ICON("Blueround", blueroundicon_bitmap, blueroundicon_textmap)};
 /*-----------------------------------------------------------------------------------*/

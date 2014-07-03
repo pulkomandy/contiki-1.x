@@ -44,7 +44,7 @@ DSC(plasma_dsc,
     &plasma_icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char plasmaicon_bitmap[3*3*8] = {
+static const unsigned char plasmaicon_bitmap[3*3*8] = {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -60,7 +60,7 @@ static unsigned char plasmaicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char plasmaicon_textmap[9] = {
+static const char plasmaicon_textmap[9] = {
   '.', ' ', '.',
   'o', ' ', 'o',
   'O', ' ', 'O'

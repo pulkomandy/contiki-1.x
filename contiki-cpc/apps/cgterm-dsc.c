@@ -44,7 +44,7 @@ DSC(cgterm_dsc,
     &icon);
 /*-----------------------------------------------------------------------------------*/
 #if CTK_CONF_ICON_BITMAPS
-static unsigned char cgtermicon_bitmap[3*3*8] = {
+static const unsigned char cgtermicon_bitmap[3*3*8] = {
   0x00, 0x7e, 0x40, 0x73, 0x46, 0x4c, 0x18, 0x13,
   0x00, 0x00, 0xff, 0x81, 0x34, 0xc9, 0x00, 0xb6,
   0x00, 0x7e, 0x02, 0xce, 0x72, 0x32, 0x18, 0x48,
@@ -60,13 +60,13 @@ static unsigned char cgtermicon_bitmap[3*3*8] = {
 #endif /* CTK_CONF_ICON_BITMAPS */
 
 #if CTK_CONF_ICON_TEXTMAPS
-static char cgtermicon_textmap[9] = {
+static const char cgtermicon_textmap[9] = {
   'T', 'e', 'l',
   'n', 'e', 't',
   'B', 'B', 'S'
 };
 #endif /* CTK_CONF_ICON_TEXTMAPS */
 
-static struct ctk_icon icon =
+static const struct ctk_icon icon =
   {CTK_ICON("C/G terminal", cgtermicon_bitmap, cgtermicon_textmap)};
 /*-----------------------------------------------------------------------------------*/
