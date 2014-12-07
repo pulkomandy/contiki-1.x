@@ -63,10 +63,10 @@ Steps
 
 Once the patched SDCC is installed, the process is rather simple:
 
-  cd contiki-cpc
-  make clean
-  make cpc
-  make programs
+    cd contiki-cpc
+    make clean
+    make cpc
+    make programs
 
 This will generate a dsk image with contiki and the various programs.
 
@@ -82,7 +82,7 @@ How to use it
 Boot your CPC or emulator and insert the disk in drive A (drive B is currently
 not supported). Then from the BASIC prompt type
 
-  run"contiki
+    run"contiki
 
 The Contiki desktop will start, and will load the "Welcome" program which shows
 a window with some hints about how to use the system. Once there, you can:
