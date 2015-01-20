@@ -36,6 +36,29 @@ changes allow for a much better experience:
 
 ![Screenshot of Contiki on CPC](/screenshot.png?raw=true "The Contiki Desktop.")
 
+How to use it
+=============
+
+A ready-to-use DSK image is available in the "release" section (look at the tabs
+at the top of this page!)
+
+Boot your CPC or emulator and insert the disk in drive A (drive B is currently
+not supported). Then from the BASIC prompt type
+
+    run"contiki
+
+The Contiki desktop will start, and will load the "Welcome" program which shows
+a window with some hints about how to use the system. Once there, you can:
+
+ * Navigate the menus (press F1 then use arrow keys)
+ * Run the "Processes" program to see a list of running processes
+ * Run the "Directory" program to list the disc contents
+
+Using either Directory or the "Run program" menu, you can start more applications,
+such as the calculator, the command line shell, the about box, etc. You can start
+multiple instances of each application, and navigate between their windows using
+the "Desktop" menu.
+
 How to build it
 ===============
 
@@ -76,26 +99,6 @@ call contiki routines. However, when contiki is recompiled, stuff move in
 memory and all programs must be recompiled. This means you should always do
 a "make clean", until the dependencies are properly defined in the makefiles.
 
-How to use it
-=============
-
-Boot your CPC or emulator and insert the disk in drive A (drive B is currently
-not supported). Then from the BASIC prompt type
-
-    run"contiki
-
-The Contiki desktop will start, and will load the "Welcome" program which shows
-a window with some hints about how to use the system. Once there, you can:
-
- * Navigate the menus (press F1 then use arrow keys)
- * Run the "Processes" program to see a list of running processes
- * Run the "Directory" program to list the disc contents
-
-Using either Directory or the "Run program" menu, you can start more applications,
-such as the calculator, the command line shel, the about box, etc. You can start
-multiple instances of each application, and navigate between their windows using
-the "Desktop" menu.
-
 Roadmap
 =======
 
@@ -125,7 +128,12 @@ code is written in C, and replacing it with an assembler version would provide
 another speed boost.
 
 Some extra features such as bitmap icons, a custom character set and more can
-be implemented here.
+be implemented here (work on this was already started and you can use custom
+icons now).
+
+The default driver is also designed to use 2 color per character, out of 16.
+The mapping to the CPC 4-color screen is suboptimal. A native driver could
+make better use of the 4 colors.
 
 Make use of memory banks
 ------------------------
