@@ -101,7 +101,8 @@ CONTIKI_OBJ= ./arch/crt0.o \
 
 contiki: $(CONTIKI_OBJ)
 	$(LD) -f arch/contiki.lnk
-	./bin/make_labels contiki.map arch/contiki_labels.s
+	#./bin/make_labels contiki.map arch/contiki_labels.s
+	sed -n "/^_CODE\|^_DATA\|_INITIALIZED/,/^Area/ s/^     \([0-9A-F]*\)  \([^ ]*\) .*/ \2 == 0x\1/p" contiki.map > arch/contiki_labels.s
 	makebin -p -s 65535 < contiki.ihx > contiki.raw
 	dd if=contiki.raw of=contiki.bin bs=256 skip=1
 	cpcfs contiki.dsk f

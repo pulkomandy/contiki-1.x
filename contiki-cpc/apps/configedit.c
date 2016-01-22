@@ -197,7 +197,7 @@ nullterminate(char *str)
   return nt;
 }
 /*-----------------------------------------------------------------------------------*/
-static char * __fastcall__
+static char *
 copystr(char *dst, char *src, int len)
 {
   char *nt = nullterminate(src);

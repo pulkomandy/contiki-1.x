@@ -52,10 +52,8 @@ _clrscr::
 .globl _gotox
 
 _gotox::
-		ld		hl,#2
-		add		hl,sp
-		ld		a,(hl)
-		inc		a
+		ld a,l
+		inc a
 		jp	0xBB6F	; TXT SET COLUMN
 
 ; void gotoy (unsigned char y);
@@ -64,9 +62,7 @@ _gotox::
 .globl _gotoy
 
 _gotoy::
-		ld		hl,#2
-		add		hl,sp
-		ld		a,(hl)
+		ld a,l
 		inc		a
 		jp	0xBB72	; TXT SET ROW
 
@@ -115,10 +111,8 @@ _wherey::
 .globl _cputc
 
 _cputc::
-		ld		hl,#2
-		add		hl,sp
-		ld		a,(hl)
-		jp		0xbb5b	; TXT OUTPUT
+		ld a,l
+		jp		0xbb5a	; TXT OUTPUT
 
 
 ; void cputcxy (unsigned char x, unsigned char y, char c)
@@ -148,11 +142,7 @@ _cputcxy::
 .globl _cputs
 
 _cputs::
-        ld              hl,#2
-        add             hl,sp
-        ld              e,(hl)
-        inc             hl
-        ld              d,(hl)
+		ex de,hl
 cputs$:
 		ld		a,(de)
 		inc de
@@ -200,60 +190,33 @@ _revers::
 
 
 
-; unsigned char textcolor (unsigned char color);
-; Set the color for text output. The old color setting is returned. 
+; void textcolor (unsigned char color);
+; Set the color for text output.
 .globl	_textcolor
 
 _textcolor::
-		ld		hl,#2
-		add		hl,sp
-		ld		a,(hl)
-		ld		d,a
-		call	0xBB93  ; TXT GET PEN
-		ld		e,a
-		ld		a,d
-		call	0xBB90	; TXT SET PEN
-		ld		l,e
-		ret
+		ld		a,l
+		jp	0xBB90	; TXT SET PEN
 
 
-; unsigned char bgcolor (unsigned char color);
-; Set the color for the background. The old color setting is returned. */
+; void bgcolor (unsigned char color);
+; Set the color for the background. */
 .globl	_bgcolor
 
 _bgcolor::	
-		ld		hl,#2
-		add		hl,sp
-		ld		a,(hl)
-		ld		d,a
-		call	0xBB99   ; TXT GET PAPER
-		ld		e,a
-		ld		a,d
-		call	0xBB96   ; TXT SET PAPER
-		ld		l,e
-		ret
+		ld		a,l
+		jp	0xBB96   ; TXT SET PAPER
 
-; unsigned char bordercolor (unsigned char color);
-; Set the color for the border. The old color setting is returned. 
+; void bordercolor (unsigned char color);
+; Set the color for the border.
 
 .globl	_bordercolor
 
 _bordercolor::
 
-		ld		hl,#2
-		add		hl,sp
-		ld		a,(hl)
-		push	af
-		call	0xBC3B   ; SCR GET BORDER
-		pop		af
-		ld		d,b
-		ld		b,a
-		ld		c,a
-		push	de
-		call	0xBC38   ; SCR SET BORDER
-		pop		de
-		ld		l,d
-		ret
+		ld		b,l
+		ld c,l
+		jp	0xBC38   ; SCR SET BORDER
 
 ; void chline (unsigned char length);
 ; Output a horizontal line with the given length starting at the current
@@ -262,9 +225,7 @@ _bordercolor::
 .globl	_chline
 
 _chline::	
-		ld		hl,#2
-		add		hl,sp
-		ld		a,(hl)
+		ld		a,l
 		or		a
 		ret		z
 		ld		b,a
@@ -309,9 +270,7 @@ _chlinexy::
 .globl _cvline
 
 _cvline::	
-		ld		hl,#2
-		add		hl,sp
-		ld		a,(hl)
+		ld		a,l
 		or		a
 		ret		z
 		ld		b,a
@@ -360,9 +319,7 @@ _cvlinexy::
 .globl _cclear
 
 _cclear::	
-		ld		hl,#2
-		add		hl,sp
-		ld		b,(hl)
+		ld		b,l
 		ld		c,#0x020 ; White space
 cclearloop$:
 		push bc

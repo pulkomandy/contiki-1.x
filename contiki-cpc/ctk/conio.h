@@ -22,9 +22,9 @@ void clrscr (void);
 
 unsigned char kbhit (void);
 
-void gotox (unsigned char x);
+void gotox (unsigned char x) __z88dk_fastcall;
 
-void gotoy (unsigned char y);
+void gotoy (unsigned char y) __z88dk_fastcall;
 
 void gotoxy (unsigned char x, unsigned char y);
 
@@ -32,31 +32,31 @@ unsigned char wherex (void);
 
 unsigned char wherey (void);
 
-void cputc (char c);
+void cputc (char c) __z88dk_fastcall;
 
 void cputcxy (unsigned char x, unsigned char y, char c);
 
-void cputs (char* s);
+void cputs (char* s) __z88dk_fastcall;
 
 char cgetc (void);
 
-void  revers (char);
+void  revers (char) __z88dk_fastcall;
 
-void textcolor (unsigned char color);
+void textcolor (unsigned char color) __z88dk_fastcall;
 
-void bgcolor (unsigned char color);
+void bgcolor (unsigned char color) __z88dk_fastcall;
 
-void  bordercolor (unsigned char color);
+void  bordercolor (unsigned char color) __z88dk_fastcall;
 
-void chline (unsigned char length);
+void chline (unsigned char length) __z88dk_fastcall;
 
 void chlinexy (unsigned char x, unsigned char y, unsigned char length);
 
-void cvline (unsigned char length);
+void cvline (unsigned char length) __z88dk_fastcall;
 
 void cvlinexy (unsigned char x, unsigned char y, unsigned char length);
 
-void cclear (unsigned char length);
+void cclear (unsigned char length) __z88dk_fastcall;
 
 void cclearxy (unsigned char x, unsigned char y, unsigned char length);
 

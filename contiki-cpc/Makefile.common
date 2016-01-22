@@ -17,9 +17,9 @@ CFLAGSCOMMON= \
 	-I $(CONTIKI)/lib \
 	-I $(CONTIKI)/ppp \
 	-I $(CONTIKI)/uip \
-	-mz80 -D__fastcall__=/**/ -D__CPC__ -DCLK_TCK=16384 \
+	-mz80 -D__CPC__ -DCLK_TCK=16384 \
 	-DCTK_CONIO --funsigned-char \
-	--no-std-crt0 --opt-code-size
+	--no-std-crt0 --opt-code-size --allow-unsafe-read
 
 CLFLAGS= 
 OPT=
