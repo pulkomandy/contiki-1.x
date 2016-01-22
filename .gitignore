@@ -1,0 +1,8 @@
+*.o
+*.sym
+*.asm
+*.lst
+*.lnk
+*.bin
+*.map
+*.ihx
