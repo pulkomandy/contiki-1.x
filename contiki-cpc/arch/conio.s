@@ -66,20 +66,15 @@ _gotoy::
 		inc		a
 		jp	0xBB72	; TXT SET ROW
 
-; void gotoxy (unsigned char x, unsigned char y)
+; void gotoyx (unsigned char y, unsigned char x)
 ; Set the cursor to the specified position 
-; y pushed first, then x
 
-.globl _gotoxy
+.globl _gotoyx
 
-_gotoxy::
-		pop hl
+_gotoyx::
 		pop de
+		pop hl
 		push de
-		push hl
-
-		ld l,d
-		ld h,e
 
 		inc h
 		inc l
@@ -143,12 +138,10 @@ _cputcxy::
 _cputsn::
 	pop de ; RV
 	pop hl ; str
+	dec sp
 	pop bc ; len
-	push bc
-	push hl
 	push de
 
-	LD B,C
 cputsn$:
 	LD A,(HL)
 	INC HL
@@ -228,24 +221,19 @@ chlineloop$:
 		djnz    chlineloop$
 		ret
 
-; void chlinexy (unsigned char x, unsigned char y, unsigned char length);
-; Same as "gotoxy (x, y); chline (length);"
+; void chlineyx (unsigned char y, unsigned char x, unsigned char length);
+; Same as "gotoxy (y, x); chline (length);"
 ; TESTED
 
-.globl _chlinexy
+.globl _chlineyx
 
-_chlinexy::
+_chlineyx::
 
-		POP HL ; RV
-		POP DE ; XY
+		POP DE ; RV
+		POP HL ; XY
+		DEC SP
 		POP BC ; L
-		PUSH BC
 		PUSH DE
-		PUSH HL
-
-		ld h,e
-		ld l,d
-		ld b,c
 
 		inc h
 		inc l
@@ -280,22 +268,17 @@ cvloop$:
 		djnz	cvloop$
 		ret
 
-; void cvlinexy (unsigned char x, unsigned char y, unsigned char length);
-; Same as "gotoxy (x, y); cvline (length);"
+; void cvlineyx (unsigned char y, unsigned char x, unsigned char length);
+; Same as "gotoyx (y, x); cvline (length);"
 
-.globl _cvlinexy
+.globl _cvlineyx
 
-_cvlinexy::	
-		POP BC ; RV
-		POP DE ; XY
-		POP HL ; L.
-		PUSH HL
+_cvlineyx::	
+		POP DE ; RV
+		POP HL ; XY
+		DEC SP
+		POP BC ; L.
 		PUSH DE
-		PUSH BC
-
-		LD B,L
-		LD L,D
-		LD H,E
 
 		inc 		h
 		inc 		l
@@ -316,38 +299,6 @@ cclearloop$:
 		pop bc
 		djnz	cclearloop$
 		ret
-
-; void cclearxy (unsigned char x, unsigned char y, unsigned char length);
-; Same as "gotoxy (x, y); cclear (length);"
-
-.globl _cclearxy
-
-_cclearxy::
-		ld		hl,#2
-		add		hl,sp
-		ld		d,(hl) ; X
-		inc		hl
-		ld		e,(hl) ; Y
-		inc		hl
-
-		ld		a,(hl) ; Length
-
-		; E is BOTTOM
-		; LEFT TOP
-		ld		h,d
-		ld		l,e
-
-		; RIGHT
-		dec 	a
-		add		d
-		ld		d,a
-
-		; ink mask
-		call	0xBB99 ; TXT GET PAPER
-		call	0xBC2C ; SCR INK ENCODE
-
-		jp	0xBC44 ; SCR FILL BOX
-
 
 ; void screensize (unsigned char* x, unsigned char* y);
 ; Return the current screen size.

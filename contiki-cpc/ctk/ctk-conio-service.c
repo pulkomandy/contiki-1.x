@@ -68,12 +68,11 @@ s_ctk_draw_init(void)
 /*-----------------------------------------------------------------------------------*/
 
 
-static void customchr(unsigned char* data) __naked
+static void customchr(unsigned char* data) __naked __z88dk_callee
 {
     __asm
 	pop de
 	pop hl
-	push hl
 	push de
 	; Can't use SCR SET MATRIX because some of our icons are in RAM under 0x4000.
 	; SCR SET MATRIX then gets data from the firmware ROM...
@@ -476,9 +475,7 @@ s_ctk_draw_dialog(struct ctk_window *dialog)
   cputcxy(x2, y2, CH_LRCORNER);
   
   /* Clear dialog contents. */
-  for(i = y1; i < y2; ++i) {
-    cclearxy(x1, i, dialog->w);
-  }
+  clearrect(y2 - 1, x1 + dialog->w - 1, y1, x1);
 
   draw_window_contents(dialog, CTK_FOCUS_DIALOG, 0, sizey,
 		       x1, x2, y1, y2);
@@ -488,20 +485,18 @@ static void
 s_ctk_draw_clear(unsigned char y1, unsigned char y2) __naked
 {
   __asm
-		ld		hl,#2
-		add		hl,sp
-		ld		d,(hl) ; Y1
-		inc		hl
-		ld		e,(hl) ; Y2
+	  pop de
+	  pop hl
+	  push hl
+	  push de
 
 		push af
 
+		ld		e,h
 		ld		h,#1
-		ld		l,d
 		ld d,#40
 
 		dec e
-		;inc e
 
 		call	0xBB99 ; TXT GET PAPER
 		call	0xBC2C ; SCR INK ENCODE

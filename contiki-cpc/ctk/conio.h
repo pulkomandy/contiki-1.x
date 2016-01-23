@@ -26,7 +26,8 @@ void gotox (unsigned char x) __z88dk_fastcall;
 
 void gotoy (unsigned char y) __z88dk_fastcall;
 
-void gotoxy (unsigned char x, unsigned char y);
+void gotoyx (unsigned char y, unsigned char x) __z88dk_callee;
+#define gotoxy(x,y) gotoyx(y,x)
 
 unsigned char wherex (void);
 
@@ -37,7 +38,7 @@ void cputc (char c) __z88dk_fastcall;
 void cputcxy (unsigned char x, unsigned char y, char c);
 
 void cputs (char* s) __z88dk_fastcall;
-void cputsn(char *str, unsigned char len);
+void cputsn(char *str, unsigned char len) __z88dk_callee;
 
 char cgetc (void);
 
@@ -51,15 +52,15 @@ void  bordercolor (unsigned char color) __z88dk_fastcall;
 
 void chline (unsigned char length) __z88dk_fastcall;
 
-void chlinexy (unsigned char x, unsigned char y, unsigned char length);
+void chlineyx (unsigned char y, unsigned char x, unsigned char length) __z88dk_callee;
+#define chlinexy(x,y,l) chlineyx(y,x,l)
 
 void cvline (unsigned char length) __z88dk_fastcall;
 
-void cvlinexy (unsigned char x, unsigned char y, unsigned char length);
+void cvlineyx (unsigned char y, unsigned char x, unsigned char length) __z88dk_callee;
+#define cvlinexy(x,y,l) cvlineyx(y,x,l)
 
 void cclear (unsigned char length) __z88dk_fastcall;
-
-void cclearxy (unsigned char x, unsigned char y, unsigned char length);
 
 void screensize (unsigned char* x, unsigned char* y);
 
