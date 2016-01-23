@@ -37,6 +37,7 @@ void cputc (char c) __z88dk_fastcall;
 void cputcxy (unsigned char x, unsigned char y, char c);
 
 void cputs (char* s) __z88dk_fastcall;
+void cputsn(char *str, unsigned char len);
 
 char cgetc (void);
 

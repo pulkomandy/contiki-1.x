@@ -73,12 +73,14 @@ _gotoy::
 .globl _gotoxy
 
 _gotoxy::
-		ld		hl,#2
-		add		hl,sp
-		ld a,(hl)
-		inc hl
-		ld l,(hl)
-		ld h,a
+		pop hl
+		pop de
+		push de
+		push hl
+
+		ld l,d
+		ld h,e
+
 		inc h
 		inc l
 		jp	0xBB75	; TXT SET CURSOR
@@ -112,7 +114,7 @@ _wherey::
 
 _cputc::
 		ld a,l
-		jp		0xbb5a	; TXT OUTPUT
+		jp		0xbb5d	; TXT OUTPUT
 
 
 ; void cputcxy (unsigned char x, unsigned char y, char c)
@@ -135,6 +137,31 @@ _cputcxy::
 		ld		a,e		
 		jp	0xbb5d
 
+; void cputsn(char *str, unsigned char len);
+.globl _cputsn
+
+_cputsn::
+	pop de ; RV
+	pop hl ; str
+	pop bc ; len
+	push bc
+	push hl
+	push de
+
+	LD B,C
+cputsn$:
+	LD A,(HL)
+	INC HL
+	OR A
+	RET Z
+	PUSH HL
+	PUSH BC
+	CALL 0xBB5D
+	POP BC
+	POP HL
+	DJNZ cputsn$
+	RET
+
 ; void cputs (const char* s);
 ; Output a NUL terminated string at the current cursor position 
 ; TESTED
@@ -142,53 +169,15 @@ _cputcxy::
 .globl _cputs
 
 _cputs::
-		ex de,hl
 cputs$:
-		ld		a,(de)
-		inc de
+		ld		a,(hl)
+		inc hl
 		or a
 		ret		z
-		push de
-		push af
+		push hl
 		call	0xbb5d
-		pop af
-		pop de
+		pop hl
 		jr		cputs$
-
-; void cputsxy (unsigned char x, unsigned char y, const char* s);
-; Same as "gotoxy (x, y); puts (s);" 
-; TESTED
-.globl _cputsxy
-
-_cputsxy::
-		ld		hl,#2
-		add		hl,sp
-		ld		e,(hl)
-		inc		hl
-		ld		d,(hl)
-
-		ld		a,(hl)
-		inc 		hl
-		ld		l,(hl)
-		ld 		h,a		
-		ex de,hl
-		inc h
-		inc l
-		call	0xBB75	; TXT SET CURSOR
-
-		jr		cputs$
-
-
-; void revers (unsigned char onoff);
-; Enable/disable reverse character display. This may not be supported by
-; the output device.
-; TESTED
-.globl _revers
-
-_revers::
-	ret
-
-
 
 ; void textcolor (unsigned char color);
 ; Set the color for text output.
@@ -246,18 +235,18 @@ chlineloop$:
 .globl _chlinexy
 
 _chlinexy::
-		ld		hl,#2
-		add		hl,sp
-		ld		d,(hl)
-		inc		hl
-		ld		e,(hl)
-		inc 		hl
-		ld		a,(hl)
-		or		a
-		ret		z
-		ld		b,a
-		ld		h,d
-		ld		l,e
+
+		POP HL ; RV
+		POP DE ; XY
+		POP BC ; L
+		PUSH BC
+		PUSH DE
+		PUSH HL
+
+		ld h,e
+		ld l,d
+		ld b,c
+
 		inc h
 		inc l
 		call	0xBB75
@@ -297,18 +286,17 @@ cvloop$:
 .globl _cvlinexy
 
 _cvlinexy::	
-		ld		hl,#2
-		add		hl,sp
-		ld		d,(hl)
-		inc 		hl
-		ld		e,(hl)
-		inc		hl
-		ld		a,(hl)
-		or		a
-		ret		z
-		ld		b,a
-		ld		h,d
-		ld		l,e
+		POP BC ; RV
+		POP DE ; XY
+		POP HL ; L.
+		PUSH HL
+		PUSH DE
+		PUSH BC
+
+		LD B,L
+		LD L,D
+		LD H,E
+
 		inc 		h
 		inc 		l
 		jr docvline$
@@ -367,22 +355,19 @@ _cclearxy::
 .globl _screensize
 
 _screensize::
-
-		ld		hl,#2
-		add		hl,sp
-		ld		e,(hl)
-		inc		hl
-		ld 		d,(hl)
+		pop bc ; RV
+		pop de ; ptr1
+		pop hl ; ptr2
 
 		ld		a,#40    ; X Size
 		ld		(de),a
 
-		inc     hl
-		ld		e,(hl)
-		inc		hl
-		ld 		d,(hl)
-
 		ld		a,#25    ; Y Size
-		ld		(de),a
+		ld		(hl),a
+
+		push hl
+		push de
+		push bc
+
 		ret
 

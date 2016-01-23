@@ -58,22 +58,6 @@ unsigned char ctk_draw_windowtitle_height = 1;*/
 
 /*-----------------------------------------------------------------------------------*/
 static void
-cputsn(char *str, unsigned char len)
-{
-  char c;
-
-  while(len > 0) {
-    --len;
-    c = *str;
-    if(c == 0) {
-      break;
-    }
-    cputc(c);
-    ++str;
-  }
-}
-/*-----------------------------------------------------------------------------------*/
-static void
 s_ctk_draw_init(void)
 {
   (void)bgcolor(SCREENCOLOR);
@@ -308,21 +292,16 @@ s_ctk_draw_widget(struct ctk_widget *w,
 }
 /*-----------------------------------------------------------------------------------*/
 
-static void clearrect(unsigned char x2, unsigned char y2,
-	unsigned char x1, unsigned char y1) __naked
+static void clearrect(unsigned char y2, unsigned char x2,
+	unsigned char y1, unsigned char x1) __naked
 {
   __asm
-		ld		hl,#2
-		add		hl,sp
-		ld		d,(hl) ; X1
-		inc		hl
-		ld		e,(hl) ; Y1
-		inc		hl
-		ld		a,(hl) ; X2
-		inc		hl
-		ld		l,(hl) ; Y2
-
-		ld h,a
+		pop bc ; RV
+		pop de ; x2 y2
+		pop hl ; x1 y1
+		push hl
+		push de
+		push bc
 
 		call	0xBB99 ; TXT GET PAPER
 		call	0xBC2C ; SCR INK ENCODE
@@ -355,10 +334,9 @@ s_ctk_draw_clear_window(struct ctk_window *window,
 	  return;
 
   if (i < clipy1) i = clipy1;
-  --clipy2;
-  if (h > clipy2) h = clipy2;
+  if (h >= clipy2) h = clipy2 - 1;
 
-  clearrect(window->x + window->w, h, window->x + 1, i);
+  clearrect(h, window->x + window->w, i, window->x + 1);
 }
 /*-----------------------------------------------------------------------------------*/
 static void
