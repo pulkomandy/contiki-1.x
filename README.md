@@ -113,12 +113,16 @@ banks or other expansion ROMs.
 
 Contiki uses the space usually reserved to BASIC, from &100 to &3700, for its
 kernel. Since the Firmware and AMSDOS reserve all memory from &A700 up, this 
-leaves about 28K of free RAM for applications. Not bad, but we can do better.
+more than 29K of free RAM for applications. Not bad, but we can do better.
+
+Current memory usage (with memstats.prg + desktop.prg running):
+* Heap size: 29188 bytes
+* Free memory: 24171 bytes
 
 Firmware-based CTK driver
 -------------------------
 
-The screen driver is using the standard "conio" driver from Contiki. This is a
+The screen driver is based on the standard "conio" driver from Contiki. This is a
 textmode based driver which is easily portable between different terminal types.
 However, the interface of this driver with the CPC firmware results in rather
 slow screen drawing. The main reason is that some operations (such as erasing
@@ -127,11 +131,11 @@ using the firmware functions which are much faster. Moreover, the portable conio
 code is written in C, and replacing it with an assembler version would provide
 another speed boost.
 
-Some extra features such as bitmap icons, a custom character set and more can
+Some extra features such as a custom character set and more can
 be implemented here (work on this was already started and you can use custom
 icons now).
 
-The default driver is also designed to use 2 color per character, out of 16.
+The driver is also designed to use 2 color per character, out of 16.
 The mapping to the CPC 4-color screen is suboptimal. A native driver could
 make better use of the 4 colors.
 
