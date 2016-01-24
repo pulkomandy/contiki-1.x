@@ -64,7 +64,6 @@ CONTIKI_OBJ= ./arch/crt0.o \
 	./arch/clock.o \
 	./loader/dir.o \
 	./loader/loader-arch-cpc.o \
-	./arch/putchar.o \
 	./apps/directory-dsc.o \
 	../contiki/apps/processes-dsc.o \
 	../contiki/apps/program-handler.o \

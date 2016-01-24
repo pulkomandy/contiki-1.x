@@ -7,9 +7,6 @@
 ;; cpc uses coordinates between 1..width, 1..height
 
 
-
-
-
 ; void clrscr (void);
 ; Clear the whole screen and put the cursor into the top left corner 
 ; TESTED
@@ -115,21 +112,20 @@ _cputc::
 ; void cputcxy (unsigned char x, unsigned char y, char c)
 ; Same as "gotoxy (x, y); cputc (c);"
 
-.globl _cputcxy
+.globl _cputcyx
 
-_cputcxy::
-		ld		hl,#4
-		add		hl,sp
-		ld		e,(hl)
-		dec		hl
-		ld		a,(hl)
-		dec 		hl
-		ld 		h,(hl)
-		ld 		l,a
+_cputcyx::
+	pop de ; RV
+	pop hl ; XY
+
 		inc h
 		inc l
 		call	0xBB75	; TXT SET CURSOR
-		ld		a,e		
+
+	dec sp
+	pop af ;  C
+	push de
+
 		jp	0xbb5d
 
 ; void cputsn(char *str, unsigned char len);
@@ -207,10 +203,7 @@ _bordercolor::
 .globl	_chline
 
 _chline::	
-		ld		a,l
-		or		a
-		ret		z
-		ld		b,a
+		ld		b,l
 dochline$:
 		ld c,#0x09a
 chlineloop$:
@@ -247,20 +240,14 @@ _chlineyx::
 .globl _cvline
 
 _cvline::	
-		ld		a,l
-		or		a
-		ret		z
-		ld		b,a
+		ld		b,l
 		call	0xBB78  ; TXT GET CURSOR
 docvline$:
-		ld c,#0x095
 cvloop$:
 		push hl
 		push bc
 		call	0xBB75 ; TXT SET CURSOR
-		pop bc
-		push bc
-		ld a,c
+		ld a,#0x095
 		call	0xbb5d
 		pop bc
 		pop hl
@@ -306,19 +293,18 @@ cclearloop$:
 .globl _screensize
 
 _screensize::
-		pop bc ; RV
+		pop hl ; RV
 		pop de ; ptr1
-		pop hl ; ptr2
 
 		ld		a,#40    ; X Size
 		ld		(de),a
 
+		pop de ; ptr2
 		ld		a,#25    ; Y Size
-		ld		(hl),a
+		ld		(de),a
 
-		push hl
 		push de
-		push bc
+		push de
 
-		ret
+		jp (hl)
 
