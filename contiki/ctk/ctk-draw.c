@@ -41,9 +41,9 @@
 #include "ctk-draw-service.h"
 
 
-unsigned char ctk_draw_windowborder_width = 1,
-  ctk_draw_windowborder_height = 1,
-  ctk_draw_windowtitle_height = 1;
+unsigned char ctk_draw_windowborder_width,
+  ctk_draw_windowborder_height,
+  ctk_draw_windowtitle_height;
 
 EK_SERVICE(service, CTK_DRAW_SERVICE_NAME);
 

@@ -132,9 +132,9 @@
  * \internal Pointer to the currently running process structure.
  *
  */
-struct ek_proc *ek_procs = NULL;
+struct ek_proc *ek_procs;
 struct ek_proc *ek_proclist[EK_CONF_MAXPROCS];
-struct ek_proc *ek_current = NULL;
+struct ek_proc *ek_current;
  
 ek_event_t ek_event_quit;
 ek_event_t ek_event_msg;
