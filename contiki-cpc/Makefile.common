@@ -18,7 +18,7 @@ CFLAGSCOMMON= \
 	-I $(CONTIKI)/ppp \
 	-I $(CONTIKI)/uip \
 	-mz80 -D__CPC__ -DCLK_TCK=16384 \
-	-DCTK_CONIO --funsigned-char --max-allocs-per-node 20000 \
+	-DCTK_CONIO --max-allocs-per-node 20000 \
 	--no-std-crt0 --opt-code-size --allow-unsafe-read
 
 CLFLAGS= 

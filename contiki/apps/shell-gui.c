@@ -81,7 +81,7 @@ shell_quit(char *str)
 }
 /*-----------------------------------------------------------------------------------*/
 void
-shell_output(char *str1, char *str2)
+shell_output(const char *str1, const char *str2)
 {
   static unsigned char i, len;
   

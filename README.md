@@ -71,7 +71,7 @@ and relocated at runtime before starting them. Running Contiki without that on
 the CPC would be much less interesting, because it is nearly impossible to write
 position independant z80 code.
 
-A patch for SDCC 3.4.1 (from the current SVN sources) is provided. Get the
+A patch for SDCC 3.6.0 (from the current SVN sources) is provided. Get the
 sources using SVN or a nightly snapshot and apply the patch, then configure
 SDCC as usual.
 
@@ -79,7 +79,7 @@ You can still use the generated version of SDCC for other projects. The only
 difference is the addition of the -h flag to the linker. When this flag is set,
 executables are generated with relocation information.
 
-You will also need cpcgs from the cpctools project.
+You will also need cpcfs from the cpctools project.
 
 Steps
 -----
@@ -113,11 +113,11 @@ banks or other expansion ROMs.
 
 Contiki uses the space usually reserved to BASIC, from &100 to &3700, for its
 kernel. Since the Firmware and AMSDOS reserve all memory from &A700 up, this 
-more than 29K of free RAM for applications. Not bad, but we can do better.
+leaves more than 29K of free RAM for applications. Not bad, but we can do better.
 
 Current memory usage (with memstats.prg + desktop.prg running):
-* Heap size: 29188 bytes
-* Free memory: 24171 bytes
+* Heap size: 29157 bytes
+* Free memory: 24282 bytes
 
 Firmware-based CTK driver
 -------------------------

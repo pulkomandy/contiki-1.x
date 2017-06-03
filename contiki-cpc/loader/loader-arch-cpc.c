@@ -2,7 +2,7 @@
 #include "rel.h"
 #include "log.h"
 #include <stddef.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 extern void *progend;
 

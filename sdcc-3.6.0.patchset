@@ -1,8 +1,14 @@
-Index: Makefile.in
-===================================================================
---- Makefile.in	(révision 9037)
-+++ Makefile.in	(copie de travail)
-@@ -47,7 +47,7 @@
+From f28f97241c95b6434d9a326d8349f25cd16bebfb Mon Sep 17 00:00:00 2001
+From: Adrien Destugues <pulkomandy@pulkomandy.tk>
+Date: Fri, 22 Jan 2016 21:01:19 +0100
+Subject: Import Kevin Thacker patch for runtime relocation support.
+
+
+diff --git a/sdas/linksrc/Makefile.in b/sdas/linksrc/Makefile.in
+index 56537a5..35f1922 100644
+--- a/sdas/linksrc/Makefile.in
++++ b/sdas/linksrc/Makefile.in
+@@ -47,7 +47,7 @@ ASXXLIBSRC = strcmpi.c
  SRC = lk_readnl.c lkaomf51.c lkar.c lkarea.c lkdata.c lkelf.c lkeval.c \
          lkhead.c lklex.c lklib.c lklibr.c lklist.c lkmain.c lkmem.c \
          lknoice.c lkout.c lkrel.c lkrloc.c lkrloc3.c lks19.c lksdcclib.c \
@@ -11,11 +17,11 @@ Index: Makefile.in
  
  LKSOURCES = $(SRC) $(ASXXLIBSRC:%.c=$(ASXXLIB)/%.c)
  
-Index: aslink.h
-===================================================================
---- aslink.h	(révision 9037)
-+++ aslink.h	(copie de travail)
-@@ -1019,6 +1019,8 @@
+diff --git a/sdas/linksrc/aslink.h b/sdas/linksrc/aslink.h
+index e0865f8..d9f6316 100644
+--- a/sdas/linksrc/aslink.h
++++ b/sdas/linksrc/aslink.h
+@@ -1033,6 +1033,8 @@ extern  int     yflag;          /*      -y, enable SDCC Debug output
                                   */
  #endif
  
@@ -24,11 +30,11 @@ Index: aslink.h
  extern  int     pflag;          /*      print linker command file flag
                                   */
  extern  int     uflag;          /*      Listing relocation flag
-Index: lkdata.c
-===================================================================
---- lkdata.c	(révision 9037)
-+++ lkdata.c	(copie de travail)
-@@ -66,6 +66,9 @@
+diff --git a/sdas/linksrc/lkdata.c b/sdas/linksrc/lkdata.c
+index bb83900..bfaa197 100644
+--- a/sdas/linksrc/lkdata.c
++++ b/sdas/linksrc/lkdata.c
+@@ -66,6 +66,9 @@ int     oflag;          /*      Output file type flag
  int     objflg;         /*      Linked file/library object output flag
                           */
  
@@ -38,11 +44,11 @@ Index: lkdata.c
  #if NOICE
  int     jflag;          /*      NoICE output flag
                           */
-Index: lkmain.c
-===================================================================
---- lkmain.c	(révision 9037)
-+++ lkmain.c	(copie de travail)
-@@ -233,6 +233,7 @@
+diff --git a/sdas/linksrc/lkmain.c b/sdas/linksrc/lkmain.c
+index 1cc7a45..9d6f916 100644
+--- a/sdas/linksrc/lkmain.c
++++ b/sdas/linksrc/lkmain.c
+@@ -233,6 +233,7 @@ main(int argc, char *argv[])
          startp->f_idp = "";
  
          pflag = 1;
@@ -50,7 +56,7 @@ Index: lkmain.c
  
          for(i=1; i<argc; i++) {
                  ip = ib;
-@@ -958,6 +959,11 @@
+@@ -960,6 +961,11 @@ parse()
                                          }
                                          return(0);
  
@@ -62,10 +68,10 @@ Index: lkmain.c
                                  case 'I':
                                          if (is_sdld() && !(TARGET_IS_Z80 || TARGET_IS_GB)) {
                                                  iramsav();
-Index: lkrloc3.c
-===================================================================
---- lkrloc3.c	(révision 9037)
-+++ lkrloc3.c	(copie de travail)
+diff --git a/sdas/linksrc/lkrloc3.c b/sdas/linksrc/lkrloc3.c
+index cf184f2..6f11cdc 100644
+--- a/sdas/linksrc/lkrloc3.c
++++ b/sdas/linksrc/lkrloc3.c
 @@ -31,6 +31,7 @@
   */
  
@@ -74,7 +80,7 @@ Index: lkrloc3.c
  
  /*)Module       lkrloc3.c
   *
-@@ -332,6 +333,9 @@
+@@ -332,6 +333,9 @@ relr3(void)
           * Do remaining relocations
           */
          while (more()) {
@@ -84,7 +90,7 @@ Index: lkrloc3.c
                  error = 0;
                  mode = (int) eval();
  
-@@ -390,6 +394,95 @@
+@@ -390,6 +394,95 @@ relr3(void)
                          reli -= paga + pags;
                  }
  
@@ -180,7 +186,7 @@ Index: lkrloc3.c
                  /*
                   * R3_BYTE or R3_WORD operation
                   */
-@@ -755,6 +848,12 @@
+@@ -755,6 +848,12 @@ rele3()
          if (uflag != 0) {
                  lkulist(0);
          }
@@ -193,10 +199,11 @@ Index: lkrloc3.c
          if (oflag != 0) {
                  lkflush();
                  lkfclose();
-Index: lkrrel.c
-===================================================================
---- lkrrel.c	(révision 0)
-+++ lkrrel.c	(copie de travail)
+diff --git a/sdas/linksrc/lkrrel.c b/sdas/linksrc/lkrrel.c
+new file mode 100644
+index 0000000..e9e8383
+--- /dev/null
++++ b/sdas/linksrc/lkrrel.c
 @@ -0,0 +1,251 @@
 +/* (c) Kevin Thacker, May 2005 */
 +#include <stdio.h>
@@ -330,7 +337,7 @@ Index: lkrrel.c
 +	rtflg[1] = 1;
 +	rtflg[2] = 1;
 +	rtcnt = 3;
-+	lkout(1);
++	ixx(1);
 +	return addr;
 +}
 +
@@ -427,7 +434,7 @@ Index: lkrrel.c
 +		cur=cur->a_ap;
 +	}
 +
-+	printf("total length before relocation records: %04x\n",areasize);
++	//printf("total length before relocation records: %04x\n",areasize);
 +
 +	/* re-write offset to relocation records */
 +	rtval[0] = 0;
@@ -439,7 +446,7 @@ Index: lkrrel.c
 +	rtflg[2] = 1;
 +	rtflg[3] = 1;
 +	rtcnt = 4;
-+	lkout(1);
++	ixx(1);
 +	
 +
 +	int addr = areasize;
@@ -449,10 +456,11 @@ Index: lkrrel.c
 +	relrecwritelist1(&head8lo,&addr);
 +	relrecwritelist2(&head8hi,&addr);
 +}
-Index: lkrrel.h
-===================================================================
---- lkrrel.h	(révision 0)
-+++ lkrrel.h	(copie de travail)
+diff --git a/sdas/linksrc/lkrrel.h b/sdas/linksrc/lkrrel.h
+new file mode 100644
+index 0000000..ca1cfd4
+--- /dev/null
++++ b/sdas/linksrc/lkrrel.h
 @@ -0,0 +1,17 @@
 +/* relocation record */
 +struct relrec
@@ -471,3 +479,7 @@ Index: lkrrel.h
 +void relrec8hi(a_uint addr, a_uint symaddr);
 +void freerelrec();
 +void relrecwrite();
+-- 
+2.7.0
+
+

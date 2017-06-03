@@ -128,7 +128,7 @@ _cputcyx::
 
 		jp	0xbb5d
 
-; void cputsn(char *str, unsigned char len);
+; void cputsn(const char *str, unsigned char len);
 .globl _cputsn
 
 _cputsn::

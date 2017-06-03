@@ -68,13 +68,13 @@ s_ctk_draw_init(void)
 /*-----------------------------------------------------------------------------------*/
 
 
-static void customchr(unsigned char* data) __naked __z88dk_callee
+static void customchr(const unsigned char* data) __naked __z88dk_callee
 {
     __asm
 	pop de
 	pop hl
 	push de
-	; Can't use SCR SET MATRIX because some of our icons are in RAM under 0x4000.
+	; Cant use SCR SET MATRIX because some of our icons are in RAM under 0x4000.
 	; SCR SET MATRIX then gets data from the firmware ROM...
 	ld a,#0x19
 	call 0xBB5a
@@ -101,7 +101,8 @@ draw_widget(struct ctk_widget *w,
 {
   unsigned char xpos, ypos, xscroll;
   unsigned char i, j;
-  char c, *text;
+  char c;
+  const char* text;
   unsigned char len, wfocus;
 
   wfocus = 0;
@@ -212,7 +213,7 @@ draw_widget(struct ctk_widget *w,
 #if CTK_CONF_ICON_BITMAPS
       gotoxy(xpos, ypos);
       if(w->widget.icon.bitmap != NULL) {
-	  unsigned char* ptr  = w->widget.icon.bitmap;
+	  const unsigned char* ptr  = w->widget.icon.bitmap;
 	for(i = 0; i < 3; ++i) {
 	  gotoxy(xpos, ypos);
 	  if(ypos >= clipy1 && ypos < clipy2) {
@@ -445,7 +446,6 @@ static void
 s_ctk_draw_dialog(struct ctk_window *dialog)
 {
   unsigned char x, y;
-  unsigned char i;
   unsigned char x1, y1, x2, y2;
   
   (void)textcolor(DIALOGCOLOR);

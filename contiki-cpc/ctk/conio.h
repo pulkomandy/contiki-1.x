@@ -38,8 +38,8 @@ void cputc (char c) __z88dk_fastcall;
 void cputcyx (unsigned char y, unsigned char x, char c) __z88dk_callee;
 #define cputcxy(x,y,c) cputcyx(y,x,c)
 
-void cputs (char* s) __z88dk_fastcall;
-void cputsn(char *str, unsigned char len) __z88dk_callee;
+void cputs (const char* s) __z88dk_fastcall;
+void cputsn(const char *str, unsigned char len) __z88dk_callee;
 
 char cgetc (void);
 

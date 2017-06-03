@@ -151,7 +151,7 @@ struct ctk_button {
 #if CTK_CONF_WIDGET_FLAGS
   unsigned char flags;
 #endif /* CTK_CONF_WIDGET_FLAGS */
-  char *text;
+  const char *text;
 };
 
 /**
@@ -182,7 +182,7 @@ struct ctk_label {
 #if CTK_CONF_WIDGET_FLAGS
   unsigned char flags;
 #endif /* CTK_CONF_WIDGET_FLAGS */
-  char *text;
+  const char *text;
 };
 
 /**
@@ -213,8 +213,8 @@ struct ctk_hyperlink {
 #if CTK_CONF_WIDGET_FLAGS
   unsigned char flags;
 #endif /* CTK_CONF_WIDGET_FLAGS */
-  char *text;
-  char *url;
+  const char *text;
+  const char *url;
 };
 
 /* Editing modes of the CTK textentry widget. */
@@ -318,10 +318,10 @@ struct ctk_icon {
 #if CTK_CONF_WIDGET_FLAGS
   unsigned char flags;
 #endif /* CTK_CONF_WIDGET_FLAGS */
-  char *title;
+  const char *title;
   ek_id_t owner;
-  unsigned char *bitmap;
-  char *textmap;
+  const unsigned char *bitmap;
+  const char *textmap;
 };
 
 #define CTK_BITMAP(x, y, w, h, bitmap, bitmap_width, bitmap_height) \
@@ -336,7 +336,7 @@ struct ctk_bitmap {
 #if CTK_CONF_WIDGET_FLAGS
   unsigned char flags;
 #endif /* CTK_CONF_WIDGET_FLAGS */
-  unsigned char *bitmap;
+  const unsigned char *bitmap;
   unsigned short bw, bh;
 };
 
@@ -354,7 +354,7 @@ struct ctk_textmap {
 #if CTK_CONF_WIDGET_FLAGS
   unsigned char flags;
 #endif /* CTK_CONF_WIDGET_FLAGS */
-  char *textmap;
+  const char *textmap;
   unsigned char state;
 };
 
@@ -363,22 +363,22 @@ struct ctk_textmap {
  * \internal The CTK button widget structure.
  */
 struct ctk_widget_button {
-  char *text;  /**< The button text. */
+  const char *text;  /**< The button text. */
 };
 
 /**
  * \internal The CTK label widget structure.
  */
 struct ctk_widget_label {
-  char *text; /**< The label text. */
+  const char *text; /**< The label text. */
 };
 
 /**
  * \internal The CTK hyperlink widget structure.
  */
 struct ctk_widget_hyperlink {
-  char *text; /**< The text of the hyperlink. */
-  char *url;  /**< The hyperlink's URL. */
+  const char *text; /**< The text of the hyperlink. */
+  const char *url;  /**< The hyperlink's URL. */
 };
 
 struct ctk_widget_textentry {
@@ -390,14 +390,14 @@ struct ctk_widget_textentry {
 };
 
 struct ctk_widget_icon {
-  char *title;
+  const char *title;
   ek_id_t owner;
-  unsigned char *bitmap;
-  char *textmap;
+  const unsigned char *bitmap;
+  const char *textmap;
 };
 
 struct ctk_widget_bitmap {
-  unsigned char *bitmap;
+  const unsigned char *bitmap;
   unsigned short bw, bh;  
 };
 /** @} */
@@ -495,7 +495,7 @@ struct ctk_window {
 			       receiver of all CTK signals that
 			       pertain to this window. */
   
-  char *title;              /**< The title of the window. Used for
+  const char *title;        /**< The title of the window. Used for
 			       constructing the "Dekstop" menu. */
   unsigned char titlelen;   /**< The length of the title, cached for
 			       speed reasons. */
@@ -545,7 +545,7 @@ struct ctk_window {
  * Representation of an individual menu item.
  */
 struct ctk_menuitem {
-  char *title;           /**< The menu items text. */
+  const char *title;           /**< The menu items text. */
   unsigned char titlelen;/**< The length of the item text, cached for
 			    speed. */
 };
@@ -559,7 +559,7 @@ struct ctk_menu {
 			    by the ctk-draw module when stepping
 			    through the menus when drawing them on
 			    screen. */
-  char *title;           /**< The menu title. */
+  const char *title;           /**< The menu title. */
   unsigned char titlelen;/**< The length of the title in
 			    characters. Cached for speed reasons. */
 #if CC_UNSIGNED_CHAR_BUGS
@@ -599,7 +599,7 @@ struct ctk_menus {
  * \internal The structure describing a Contiki desktop.
  */
 struct ctk_desktop {
-  char *name; /**< The name of the desktop. */
+  const char *name; /**< The name of the desktop. */
    
   struct ctk_window desktop_window; /**< The background window which
 				       contains tha desktop icons. */
@@ -667,7 +667,7 @@ unsigned char ctk_mode_get(void);
 /* Functions for manipulating windows. */
 void ctk_window_new(struct ctk_window *window,
 		    unsigned char w, unsigned char h,
-		    char *title);
+		    const char *title);
 void ctk_window_clear(struct ctk_window *w);
 void ctk_window_open(struct ctk_window *w);
 #define ctk_window_move(w,xpos,ypos) do { (w)->x=xpos; (w)->y=ypos; } while(0)
@@ -683,10 +683,10 @@ void ctk_dialog_open(struct ctk_window *d);
 void ctk_dialog_close(void);
 
 /* Functions for manipulating menus. */
-void ctk_menu_new(struct ctk_menu *menu, char *title);
+void ctk_menu_new(struct ctk_menu *menu, const char *title);
 void ctk_menu_add(struct ctk_menu *menu);
 void ctk_menu_remove(struct ctk_menu *menu);
-unsigned char ctk_menuitem_add(struct ctk_menu *menu, char *name);
+unsigned char ctk_menuitem_add(struct ctk_menu *menu, const char *name);
 
 /* Functions for icons. */
 
