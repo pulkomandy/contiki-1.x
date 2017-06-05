@@ -6,7 +6,7 @@ NAME = contiki
 DEFINES += FONT_W=6 FONT_H=8
 
 
-GAME_C_FILES = contiki-main.c ctk/ctk-arch.c ctk/conio.c \
+GAME_C_FILES = contiki-main.c ctk/ctk-arch.c ctk/conio.c lib/cfs-fatfs.c \
 	$(CONTIKI)/apps/about-dsc.c $(CONTIKI)/apps/about.c \
 	$(CONTIKI)/apps/calc-dsc.c $(CONTIKI)/apps/calc.c \
 	$(CONTIKI)/apps/editor-dsc.c $(CONTIKI)/apps/editor.c \
@@ -21,7 +21,7 @@ GAME_C_FILES = contiki-main.c ctk/ctk-arch.c ctk/conio.c \
 	lib/textmode/textmode.c \
 	lib/events/events.c \
 
-GAME_C_OPTS = -I ctk -I conf -I $(CONTIKI)/apps -I $(CONTIKI)/ctk \
+GAME_C_OPTS = -I ctk -I lib -I conf -I $(CONTIKI)/apps -I $(CONTIKI)/ctk \
     -I $(CONTIKI)/ek -I $(CONTIKI)/lib -I $(CONTIKI)/uip \
 #	-D__GP32__ -DCTK_CONIO -DWITH_UIP \
 	-DWITH_WWW -D WITH_TELNET_WWW \

@@ -8,6 +8,7 @@
 #include "program-handler.h"
 
 #include "clock-conf.h"
+#include "cfs-fatfs.h"
 
 // Applications
 #include "netconf-dsc.h"
@@ -32,31 +33,37 @@ void conio_init(void)
 	// Clear display and set a visible palette (default is black on black)
 	clear();
 
+	// Make sure unused color are black on black
 	for (int i = 0; i < 256; i++)
 		set_palette(i, 0, 0);
 
-	set_palette(0, RGB(0, 0, 0), RGB(0, 0, 0));       // border (ok)
+	// Set up an ad hoc palette just so it looks good. Later on we can maybe
+	// add this to the settings application?
+	set_palette(0, RGB(0, 0, 0), RGB(0, 0, 0));       // border (ok, unused?)
 	set_palette(1, RGB(0, 0, 0), RGB(146, 146, 255)); // screen (ok)
 	set_palette(3, RGB(0, 0, 0), RGB(128, 128, 128)); // open menu (ok)
 	set_palette(4, RGB(0, 0, 0), RGB(255, 128, 128)); // active menu item (ok)
-	set_palette(5, RGB(0, 0, 0), RGB(240,240,240));     // dialogs (ok)
-	set_palette(6, RGB(100,100,255), RGB(255,128,128));   // highlighted hyperlinks (ok)
+	set_palette(5, RGB(0, 0, 0), RGB(240,240,240));   // dialogs (ok)
+	set_palette(6, RGB(100,100,255), RGB(255,128,128)); // highlighted hyperlinks (ok)
+	set_palette(7, RGB(0,0,64), RGB(192,192,255));   // moving window (ok)
 	set_palette(8, RGB(64,64,64), RGB(192,192,192)); // inactive window/widgets
 
 	set_palette(2+16, RGB(0, 0, 0), RGB(255, 255, 255)); // menu (ok)
-	set_palette(6+16, RGB(0, 0, 255), RGB(240,240,240));    // hyperlinks (ok)
-	set_palette(7+16, RGB(0,0,0), RGB(255,128,128));  // focus widget
-
-	set_palette(7, RGB(0,0,64), RGB(192,192,255)); // moving window
-
+	set_palette(6+16, RGB(0, 0, 255), RGB(240,240,240)); // hyperlinks (ok)
+	set_palette(7+16, RGB(0,0,0), RGB(255,128,128));     // focus widget
 
 }
 
+
+// Use the vga_frame counter as a main clock. It would be nice to have a
+// millisecond-precision (or more) clock, but this will do for now.
 clock_time_t clock_time(void)
 {
 	return vga_frame;
 }
 
+
+// For debugging purposes only. Actually I didn't see it being called yet.
 void
 log_message(const char *part1, const char *part2)
 {
@@ -68,6 +75,7 @@ void bitbox_main(void)
 	ek_init();
 	conio_init();
 	ctk_init();
+	cfs_fatfs_init(NULL);
 	program_handler_init();
 
 #if 0
