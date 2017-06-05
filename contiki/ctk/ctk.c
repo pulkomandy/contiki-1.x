@@ -735,7 +735,7 @@ ctk_window_redraw(struct ctk_window *w)
 static void 
 window_new(CC_REGISTER_ARG struct ctk_window *window,
 	   unsigned char w, unsigned char h,
-	   char *title)
+	   const char *title)
 {
   
   if(w >= width - 2) {
@@ -784,7 +784,7 @@ window_new(CC_REGISTER_ARG struct ctk_window *window,
 void
 ctk_window_new(struct ctk_window *window,
 	       unsigned char w, unsigned char h,
-	       char *title)
+	       const char *title)
 {
   window_new(window, w, h, title);
 
@@ -823,7 +823,7 @@ ctk_dialog_new(CC_REGISTER_ARG struct ctk_window *dialog,
 /*-----------------------------------------------------------------------------------*/
 void 
 ctk_menu_new(CC_REGISTER_ARG struct ctk_menu *menu,
-	     char *title)
+	     const char *title)
 {
 #if CTK_CONF_MENUS
   menu->next = NULL;
@@ -849,7 +849,7 @@ ctk_menu_new(CC_REGISTER_ARG struct ctk_menu *menu,
 /*-----------------------------------------------------------------------------------*/
 unsigned char
 ctk_menuitem_add(CC_REGISTER_ARG struct ctk_menu *menu,
-		 char *name)
+		 const char *name)
 {
 #if CTK_CONF_MENUS
   if(menu->nitems == CTK_CONF_MAXMENUITEMS) {

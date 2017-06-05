@@ -233,6 +233,7 @@ struct ctk_hyperlink {
 	do { memset((e)->text, 0, (e)->h * ((e)->len + 1)); \
 	     (e)->xpos = 0; (e)->ypos = 0; } while(0)
 
+struct ctk_textentry;
 typedef unsigned char (* ctk_textentry_input)(ctk_arch_key_t c,
 					      struct ctk_textentry *t);
 
