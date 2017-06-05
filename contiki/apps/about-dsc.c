@@ -35,6 +35,7 @@
 
 #include "dsc.h"
 
+static const struct ctk_icon about_icon;
 /*-----------------------------------------------------------------------------------*/
 const DSC(about_dsc,
     "About Contiki",

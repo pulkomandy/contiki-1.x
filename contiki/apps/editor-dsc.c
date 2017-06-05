@@ -35,6 +35,7 @@
 
 #include "dsc.h"
 
+static const struct ctk_icon editor_icon;
 /*-----------------------------------------------------------------------------------*/
 const DSC(editor_dsc,
     "A simple text editor",

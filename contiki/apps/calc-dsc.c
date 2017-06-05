@@ -35,6 +35,7 @@
 
 #include "dsc.h"
 
+static const struct ctk_icon calc_icon;
 /*-----------------------------------------------------------------------------------*/
 const DSC(calc_dsc,
     "Simple calculator",

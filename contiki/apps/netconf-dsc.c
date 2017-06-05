@@ -35,6 +35,7 @@
 
 #include "dsc.h"
 
+static const struct ctk_icon netconf_icon;
 /*-----------------------------------------------------------------------------------*/
 const DSC(netconf_dsc,
     "Network configuration",

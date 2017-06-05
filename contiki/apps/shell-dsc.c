@@ -35,6 +35,7 @@
 
 #include "dsc.h"
 
+static const struct ctk_icon shell_icon;
 /*-----------------------------------------------------------------------------------*/
 const DSC(shell_dsc,
     "The Contiki command shell",

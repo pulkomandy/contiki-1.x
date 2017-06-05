@@ -35,6 +35,7 @@
 
 #include "dsc.h"
 
+static const struct ctk_icon processes_icon;
 /*-----------------------------------------------------------------------------------*/
 const DSC(processes_dsc,
     "Process information",
