@@ -11,11 +11,12 @@ GAME_C_FILES = contiki-main.c ctk/ctk-arch.c ctk/conio.c \
 	$(CONTIKI)/apps/calc-dsc.c $(CONTIKI)/apps/calc.c \
 	$(CONTIKI)/apps/editor-dsc.c $(CONTIKI)/apps/editor.c \
 	$(CONTIKI)/apps/processes-dsc.c $(CONTIKI)/apps/processes.c \
+	$(CONTIKI)/apps/shell-dsc.c $(CONTIKI)/apps/shell-gui.c $(CONTIKI)/apps/shell.c \
 	$(CONTIKI)/apps/program-handler.c $(CONTIKI)/ctk/ctk.c \
 	$(CONTIKI)/ctk/ctk-conio.c \
 	$(CONTIKI)/ek/arg.c $(CONTIKI)/ek/ek.c $(CONTIKI)/ek/ek-service.c \
 	$(CONTIKI)/lib/cfs.c $(CONTIKI)/lib/ctk-filedialog.c \
-	$(CONTIKI)/lib/memb.c \
+	$(CONTIKI)/lib/ctk-textentry-cmdline.c $(CONTIKI)/lib/memb.c \
 	$(CONTIKI)/lib/petsciiconv.c $(CONTIKI)/lib/timer.c \
 	lib/textmode/textmode.c \
 	lib/events/events.c \

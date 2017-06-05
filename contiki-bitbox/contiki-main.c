@@ -83,7 +83,7 @@ void bitbox_main(void)
 	program_handler_add(&editor_dsc,    "Editor",        1);
 	program_handler_add(&calc_dsc,      "Calculator",    1);
 	program_handler_add(&processes_dsc, "Processes",     1);
-	//program_handler_add(&shell_dsc,     "Command shell", 1);
+	program_handler_add(&shell_dsc,     "Command shell", 1);
 	program_handler_add(&about_dsc,     "About Contiki", 0);
 
 	// Call ek_run until everything is initialized. Then, load welcome.prg.
