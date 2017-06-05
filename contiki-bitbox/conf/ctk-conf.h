@@ -54,8 +54,10 @@
 #define CTK_CONF_WIDGETDOWN_KEY       '\t'
 #define CTK_CONF_WIDGETUP_KEY         (signed char)KEY_PAGEUP
 
+#define CTK_CONF_MOUSE_SUPPORT        1
+
 /* Toggles support for icons. */
-#define CTK_CONF_ICONS                1 /* 107 bytes */
+#define CTK_CONF_ICONS                1
 
 /* Toggles support for icon bitmaps. */
 #define CTK_CONF_ICON_BITMAPS         1
@@ -64,13 +66,13 @@
 #define CTK_CONF_ICON_TEXTMAPS        1
 
 /* Toggles support for movable windows. */
-#define CTK_CONF_WINDOWMOVE           1 /* 333 bytes */
+#define CTK_CONF_WINDOWMOVE           1
 
 /* Toggles support for closable windows. */
-#define CTK_CONF_WINDOWCLOSE          1 /* 14 bytes */
+#define CTK_CONF_WINDOWCLOSE          1
 
 /* Toggles support for menus. */
-#define CTK_CONF_MENUS                1 /* 1384 bytes */
+#define CTK_CONF_MENUS                1
 
 /* Defines the default width of a menu. */
 #define CTK_CONF_MENUWIDTH            16
