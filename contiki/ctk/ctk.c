@@ -179,7 +179,7 @@ ek_event_t ctk_signal_screensaver_stop,
  */
 
 #if CTK_CONF_MOUSE_SUPPORT
-unsigned short mouse_x, mouse_y, mouse_button;
+static unsigned short _mouse_x, _mouse_y, mouse_button;
 #endif /* CTK_CONF_MOUSE_SUPPORT */
 
 static unsigned short screensaver_timer = 0;
@@ -1454,15 +1454,15 @@ EK_POLLHANDLER(ctk_poll)
   }
   
   /* Check if the mouse pointer has moved. */
-  if(ctk_mouse_x() != mouse_x ||
-     ctk_mouse_y() != mouse_y) {
-    mouse_x = ctk_mouse_x();
-    mouse_y = ctk_mouse_y();
+  if(ctk_mouse_x() != _mouse_x ||
+     ctk_mouse_y() != _mouse_y) {
+    _mouse_x = ctk_mouse_x();
+    _mouse_y = ctk_mouse_y();
     mouse_moved = 1;
   }
 
-  mxc = ctk_mouse_xtoc(mouse_x);
-  myc = ctk_mouse_ytoc(mouse_y); 
+  mxc = ctk_mouse_xtoc(_mouse_x);
+  myc = ctk_mouse_ytoc(_mouse_y); 
 #endif /* CTK_CONF_MOUSE_SUPPORT */
 
 
