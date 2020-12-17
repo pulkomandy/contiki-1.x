@@ -10,6 +10,9 @@ Contiki 1.x features a GUI, dynamic loading of executables with runtime
 relocation, and a cooperative multitasking event-driven kernel. It also includes
 an IPv4 network stack and a few other things.
 
+Amstrad CPC port
+----------------
+
 This fork is focused on improving the Amstrad CPC port of Contiki. This version
 was done by Kevin Thacker, but he didn't get it much further than showing the
 desktop. At the time, problems with the SDCC compiler and lack of proper
@@ -35,6 +38,14 @@ changes allow for a much better experience:
  * Support for bitmap icons
 
 ![Screenshot of Contiki on CPC](/screenshot.png?raw=true "The Contiki Desktop.")
+
+Bitbox port
+-----------
+
+This port also contains a port for the Bitbox console.
+
+Not much to say, it uses one of the bitbox textmodes, and was surprisingly
+easy to get up and running.
 
 How to use it
 =============
@@ -116,8 +127,8 @@ kernel. Since the Firmware and AMSDOS reserve all memory from &A700 up, this
 leaves more than 29K of free RAM for applications. Not bad, but we can do better.
 
 Current memory usage (with memstats.prg + desktop.prg running):
-* Heap size: 29157 bytes
-* Free memory: 24282 bytes
+* Heap size: 29218 bytes
+* Free memory: 24423 bytes
 
 Firmware-based CTK driver
 -------------------------

@@ -1,11 +1,11 @@
-From f28f97241c95b6434d9a326d8349f25cd16bebfb Mon Sep 17 00:00:00 2001
+From 64c8f32ebb624c1b58a0ab5683eed7577d38a29d Mon Sep 17 00:00:00 2001
 From: Adrien Destugues <pulkomandy@pulkomandy.tk>
 Date: Fri, 22 Jan 2016 21:01:19 +0100
 Subject: Import Kevin Thacker patch for runtime relocation support.
 
 
 diff --git a/sdas/linksrc/Makefile.in b/sdas/linksrc/Makefile.in
-index 56537a5..35f1922 100644
+index 43e16f5..e37b167 100644
 --- a/sdas/linksrc/Makefile.in
 +++ b/sdas/linksrc/Makefile.in
 @@ -47,7 +47,7 @@ ASXXLIBSRC = strcmpi.c
@@ -18,7 +18,7 @@ index 56537a5..35f1922 100644
  LKSOURCES = $(SRC) $(ASXXLIBSRC:%.c=$(ASXXLIB)/%.c)
  
 diff --git a/sdas/linksrc/aslink.h b/sdas/linksrc/aslink.h
-index e0865f8..d9f6316 100644
+index ebad061..7dce058 100644
 --- a/sdas/linksrc/aslink.h
 +++ b/sdas/linksrc/aslink.h
 @@ -1033,6 +1033,8 @@ extern  int     yflag;          /*      -y, enable SDCC Debug output
@@ -31,7 +31,7 @@ index e0865f8..d9f6316 100644
                                   */
  extern  int     uflag;          /*      Listing relocation flag
 diff --git a/sdas/linksrc/lkdata.c b/sdas/linksrc/lkdata.c
-index bb83900..bfaa197 100644
+index e03cd6a..db7c8ff 100644
 --- a/sdas/linksrc/lkdata.c
 +++ b/sdas/linksrc/lkdata.c
 @@ -66,6 +66,9 @@ int     oflag;          /*      Output file type flag
@@ -45,7 +45,7 @@ index bb83900..bfaa197 100644
  int     jflag;          /*      NoICE output flag
                           */
 diff --git a/sdas/linksrc/lkmain.c b/sdas/linksrc/lkmain.c
-index 1cc7a45..9d6f916 100644
+index fcf7242..5535b95 100644
 --- a/sdas/linksrc/lkmain.c
 +++ b/sdas/linksrc/lkmain.c
 @@ -233,6 +233,7 @@ main(int argc, char *argv[])
@@ -56,7 +56,7 @@ index 1cc7a45..9d6f916 100644
  
          for(i=1; i<argc; i++) {
                  ip = ib;
-@@ -960,6 +961,11 @@ parse()
+@@ -999,6 +1000,11 @@ parse()
                                          }
                                          return(0);
  
@@ -69,7 +69,7 @@ index 1cc7a45..9d6f916 100644
                                          if (is_sdld() && !(TARGET_IS_Z80 || TARGET_IS_GB)) {
                                                  iramsav();
 diff --git a/sdas/linksrc/lkrloc3.c b/sdas/linksrc/lkrloc3.c
-index cf184f2..6f11cdc 100644
+index b330184..0a83e0f 100644
 --- a/sdas/linksrc/lkrloc3.c
 +++ b/sdas/linksrc/lkrloc3.c
 @@ -31,6 +31,7 @@
@@ -90,7 +90,7 @@ index cf184f2..6f11cdc 100644
                  error = 0;
                  mode = (int) eval();
  
-@@ -390,6 +394,95 @@ relr3(void)
+@@ -390,6 +394,93 @@ relr3(void)
                          reli -= paga + pags;
                  }
  
@@ -181,12 +181,10 @@ index cf184f2..6f11cdc 100644
 +			}
 +		}		
 +		}
-+
-+
-                 /*
-                  * R3_BYTE or R3_WORD operation
-                  */
-@@ -755,6 +848,12 @@ rele3()
+ 
+                 /* pdk instruction fusion */
+                 if (TARGET_IS_PDK) {
+@@ -856,6 +947,12 @@ rele3()
          if (uflag != 0) {
                  lkulist(0);
          }
@@ -480,6 +478,6 @@ index 0000000..ca1cfd4
 +void freerelrec();
 +void relrecwrite();
 -- 
-2.7.0
+2.28.0
 
 
