@@ -14,6 +14,8 @@ _get_file_length::
 	ld h,(hl)
 	ld l,a
 
+	push ix
+
 	;; HL = address of null terminated string
 	call count_string_length
 	ld de,#0x0c000		;; points to unused 2k buffer
@@ -21,6 +23,8 @@ _get_file_length::
 	push bc			;; BC = length of file
 	call 0x0bc7d		;; cas in abandon
 	pop hl
+
+	pop ix
 	ret
 
 ;;---------------------------------------------------------------------
@@ -49,18 +53,23 @@ _load_file::
 	ld e,(hl)
 	dec hl
 
-	push de
 	ld a,(hl)
 	dec hl
 	ld l,(hl)
 	ld h,a
 
+	push ix
+
 	call count_string_length
+	push de
 	ld de,#0x0c000
 	call 0x0bc77		;; cas in open
 	pop hl			;; load address
 	call 0x0bc83		;; cas in direct
 	call 0x0bc7a		;; cas in close
+
+	pop ix
+
 	ret
 
 ;; void relocate(void *addr,void *base)
